@@ -12,7 +12,7 @@
         a.U_PERIODO             AS          tipo_periodo,
         a.U_CANPER              AS          tipo_cantidad
         
-        FROM [dbo].[@A1A_TIPE] a
+        FROM [CSF_PRUEBA].[dbo].[@A1A_TIPE] a
 
         ORDER BY a.U_CODIGO";
 
@@ -83,7 +83,7 @@
             a.U_PERIODO             AS          tipo_periodo,
             a.U_CANPER              AS          tipo_cantidad
             
-            FROM [dbo].[@A1A_TIPE] a
+            FROM [CSF_PRUEBA].[dbo].[@A1A_TIPE] a
 
             WHERE a.CODE = ?
 
@@ -160,7 +160,7 @@
             a.U_PERIODO             AS          tipo_periodo,
             a.U_CANPER              AS          tipo_cantidad
             
-            FROM [dbo].[@A1A_TIPE] a
+            FROM [CSF_PRUEBA].[dbo].[@A1A_TIPE] a
 
             WHERE a.U_CODIGO = ?
 
@@ -237,7 +237,7 @@
             a.U_PERIODO             AS          tipo_periodo,
             a.U_CANPER              AS          tipo_cantidad
             
-            FROM [dbo].[@A1A_TIPE] a
+            FROM [CSF_PRUEBA].[dbo].[@A1A_TIPE] a
 
             WHERE a.U_CODINA = ?
 
