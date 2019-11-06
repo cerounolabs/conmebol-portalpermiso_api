@@ -1436,8 +1436,6 @@
         FROM [CSF_PRUEBA].[dbo].[@A1A_TIDE] a
         LEFT OUTER JOIN [CSF_PRUEBA].[dbo].[@A1A_TIGE] b ON a.U_CODGER = b.U_CODIGO
 
-        WHERE a.CODE = ?
-
         ORDER BY a.U_CODIGO";
 
         try {
