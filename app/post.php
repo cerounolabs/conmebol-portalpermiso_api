@@ -9,14 +9,17 @@
         $val05      = $request->getParsedBody()['usuario_var05'];
         $val06      = $request->getParsedBody()['usuario_var06'];
         $val07      = $request->getParsedBody()['usuario_var07'];
-        $server     = "172.16.50.1";
+        $server     = "ldap://172.16.50.1";
 
         if (isset($val01) && isset($val02) && isset($val03)) {
             try {
                 $ldap_conn  = ldap_connect($server);
-                ldap_set_option($ldap_conn, LDAP_OPT_PROTOCOL_VERSION, 3);
+                $ldap_rdn   = 'conmebol.com'."\\".$val01;
 
-                if(@ldap_bind($ldap_conn, $val01, $val02)){
+                ldap_set_option($ldap_conn, LDAP_OPT_PROTOCOL_VERSION, 3);
+                ldap_set_option($ldap_conn, LDAP_OPT_REFERRALS, 0);
+
+                if(@ldap_bind($ldap_conn, $ldap_rdn, $val02)){
                     $result = "Si se conecto";
                 } else {
                     $result = "No se conecto";
