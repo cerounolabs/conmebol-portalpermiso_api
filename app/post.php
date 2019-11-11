@@ -14,7 +14,7 @@
         if (isset($val01) && isset($val02) && isset($val03)) {
             try {
                 $ldap_conn  = ldap_connect($server);
-                $ldap_rdn   = 'conmebol.com'."\\".$val01;
+                $ldap_rdn   = $val01;
 
                 ldap_set_option($ldap_conn, LDAP_OPT_PROTOCOL_VERSION, 3);
                 ldap_set_option($ldap_conn, LDAP_OPT_REFERRALS, 0);
