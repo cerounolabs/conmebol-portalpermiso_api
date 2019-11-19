@@ -147,7 +147,7 @@
                     $stmtMSSQL03->execute([$DOMPARTST, $rowMSSQL00['tipo_codigo'], $rowMSSQL00['tipo_codigo_nombre'], $rowMSSQL00['tipo_codigo_referencia']]);
                     $rowMSSQL03 = $stmtMSSQL03->fetch(PDO::FETCH_ASSOC);
 
-                    if (!isset($rowMSSQL03)) {
+                    if (!$rowMSSQL03) {
                         $stmtMSSQL04->execute([$DOMPAREST, $DOMPARTST, $DOMPARORD, $rowMSSQL00['tipo_codigo'], $rowMSSQL00['tipo_codigo_nombre'], $rowMSSQL00['tipo_codigo_referencia'], $DOMPARDIC, $DOMPARDIO, $DOMPAROBS, $DOMPARAUS, $DOMPARAIP]);
                     }
                 }
