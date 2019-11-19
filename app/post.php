@@ -53,9 +53,9 @@
         $val06      = $request->getParsedBody()['tipo_dia_corrido'];
         $val07      = $request->getParsedBody()['tipo_observacion'];
 
-        $aud01      = $request->getParsedBody()['tipo_usuario'];
-        $aud02      = $request->getParsedBody()['tipo_fecha_hora'];
-        $aud03      = $request->getParsedBody()['tipo_ip'];
+        $aud01      = $request->getParsedBody()['auditoria_usuario'];
+        $aud02      = $request->getParsedBody()['auditoria_fecha_hora'];
+        $aud03      = $request->getParsedBody()['auditoria_ip'];
 
         if (isset($val01) && isset($val02) && isset($val04)) {    
             $sql00  = "";
@@ -114,9 +114,9 @@
     $app->post('/v1/100/procesar', function($request) {
         require __DIR__.'/../src/connect.php';
 
-        $aud01      = $request->getParsedBody()['tipo_usuario'];
-        $aud02      = $request->getParsedBody()['tipo_fecha_hora'];
-        $aud03      = $request->getParsedBody()['tipo_ip'];
+        $aud01      = $request->getParsedBody()['auditoria_usuario'];
+        $aud02      = $request->getParsedBody()['auditoria_fecha_hora'];
+        $aud03      = $request->getParsedBody()['auditoria_ip'];
 
         if (isset($aud01) && isset($aud02) && isset($aud03)) {
             $DOMPAREST  = 'A';
