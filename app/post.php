@@ -42,7 +42,7 @@
         return $json;
     });
 
-    $app->post('/v1/000', function($request) {
+    $app->post('/v1/100', function($request) {
         require __DIR__.'/../src/connect.php';
 
         $val01      = $request->getParsedBody()['tipo_estado_codigo'];
@@ -111,7 +111,7 @@
         return $json;
     });
 
-    $app->post('/v1/000/procesar', function($request) {
+    $app->post('/v1/100/procesar', function($request) {
         require __DIR__.'/../src/connect.php';
 
         $aud01      = $request->getParsedBody()['tipo_usuario'];
@@ -119,7 +119,7 @@
         $aud03      = $request->getParsedBody()['tipo_ip'];
 
         if (isset($aud01) && isset($aud02) && isset($aud03)) {
-            $DOMPAREST  = 'H';
+            $DOMPAREST  = 'A';
             $DOMPARORD  = 0;
             $DOMPARDIC  = 0;
             $DOMPARDIO  = '';

@@ -1804,3 +1804,129 @@
         
         return $json;
     });
+
+    $app->get('/v1/100', function($request) {
+        require __DIR__.'/../src/connect.php';
+        
+        $sql00  = "SELECT
+        a.DOMPARCOD         AS          tipo_permiso_codigo,
+        a.DOMPAREST         AS          tipo_estado_codigo,
+        a.DOMPARTST         AS          tipo_solicitud_codigo,
+        a.DOMPARPC1         AS          tipo_permiso_codigo1,
+        a.DOMPARPC2         AS          tipo_permiso_codigo2,
+        a.DOMPARPC3         AS          tipo_permiso_codigo3,
+        a.DOMPARORD         AS          tipo_orden_numero,
+        a.DOMPARDIC         AS          tipo_dia_cantidad,
+        a.DOMPARDIO         AS          tipo_dia_corrido,
+        a.DOMPAROBS         AS          tipo_observacion,
+        a.DOMPARAUS         AS          auditoria_usuario,
+        a.DOMPARAFH         AS          auditoria_fecha_hora,
+        a.DOMPARAIP         AS          auditoria_ip
+        
+        FROM [CSF_PERMISO].[adm].[DOMPAR] a
+
+        ORDER BY a.DOMPARTST, a.DOMPARORD";
+
+        try {
+            $connMSSQL  = getConnectionMSSQL();
+
+            $stmtMSSQL00= $connMSSQL->prepare($sql00);
+            $stmtMSSQL00->execute(); 
+
+            while ($rowMSSQL00 = $stmtMSSQL00->fetch()) {
+                $sql01  = '';
+
+                switch ($rowMSSQL00['tipo_estado_codigo']) {
+                    case 'A':
+                        $tipo_estado_nombre = 'ACTIVO';
+                        break;
+                    
+                    case 'I':
+                        $tipo_estado_nombre = 'INACTIVO';
+                        break;
+                }
+
+                switch ($rowMSSQL00['tipo_solicitud_codigo']) {
+                    case 'L':
+                        $tipo_solicitud_nombre  = 'LICENCIA';
+                        $sql01                  = "SELECT U_NOMBRE AS tipo_permiso_nombre FROM dbo.[@A1A_TILC] WHERE Code = ? AND Name = ? AND U_CODIGO = ?";
+                        break;
+                    
+                    case 'P':
+                        $tipo_solicitud_nombre  = 'PERMISO';
+                        $sql01                  = "SELECT U_NOMBRE AS tipo_permiso_nombre FROM dbo.[@A1A_TIPE] WHERE Code = ? AND Name = ? AND U_CODIGO = ?";
+                        break;
+    
+                    case 'I':
+                        $tipo_solicitud_nombre  = 'INASISTENCIA';
+                        $sql01                  = "SELECT U_DESAMP AS tipo_permiso_nombre FROM dbo.[@A1A_TIIN] WHERE Code = ? AND Name = ? AND U_CODIGO = ?";
+                        break;
+                }
+
+                $stmtMSSQL01= $connMSSQL->prepare($sql01);
+                $stmtMSSQL01->execute([$rowMSSQL00['tipo_permiso_codigo1'], $rowMSSQL00['tipo_permiso_codigo2'], $rowMSSQL00['tipo_permiso_codigo3']]);
+
+                $rowMSSQL01 = $stmtMSSQL01->fetch(PDO::FETCH_ASSOC);
+                $detalle    = array(
+                    'tipo_permiso_codigo'                       => $rowMSSQL00['tipo_permiso_codigo'],
+                    'tipo_estado_codigo'                        => $rowMSSQL00['tipo_estado_codigo'],
+                    'tipo_estado_nombre'                        => trim(strtoupper($tipo_estado_nombre)),
+                    'tipo_solicitud_codigo'                     => $rowMSSQL00['tipo_solicitud_codigo'],
+                    'tipo_solicitud_nombre'                     => trim(strtoupper($tipo_solicitud_nombre)),
+                    'tipo_permiso_codigo1'                      => $rowMSSQL00['tipo_permiso_codigo1'],
+                    'tipo_permiso_codigo2'                      => $rowMSSQL00['tipo_permiso_codigo2'],
+                    'tipo_permiso_codigo3'                      => trim(strtoupper($rowMSSQL00['tipo_permiso_codigo3'])),
+                    'tipo_permiso_nombre'                       => trim(strtoupper($rowMSSQL01['tipo_permiso_nombre'])),
+                    'tipo_orden_numero'                         => $rowMSSQL00['tipo_orden_numero'],
+                    'tipo_dia_cantidad'                         => $rowMSSQL00['tipo_dia_cantidad'],
+                    'tipo_dia_corrido'                          => trim(strtoupper($rowMSSQL00['tipo_dia_corrido'])),
+                    'tipo_observacion'                          => trim(strtoupper($rowMSSQL00['tipo_observacion'])),
+                    'auditoria_usuario'                         => trim(strtoupper($rowMSSQL00['auditoria_usuario'])),
+                    'auditoria_fecha_hora'                      => $rowMSSQL00['auditoria_fecha_hora'],
+                    'auditoria_ip'                              => trim(strtoupper($rowMSSQL00['auditoria_ip']))
+                );
+
+                $result[]   = $detalle;
+            }
+
+            if (isset($result)){
+                header("Content-Type: application/json; charset=utf-8");
+                $json = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success SELECT', 'data' => $result), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+            } else {
+                $detalle = array(
+                    'tipo_permiso_codigo'                       => '',
+                    'tipo_estado_codigo'                        => '',
+                    'tipo_estado_nombre'                        => '',
+                    'tipo_solicitud_codigo'                     => '',
+                    'tipo_solicitud_nombre'                     => '',
+                    'tipo_permiso_codigo1'                      => '',
+                    'tipo_permiso_codigo2'                      => '',
+                    'tipo_permiso_codigo3'                      => '',
+                    'tipo_permiso_nombre'                       => '',
+                    'tipo_orden_numero'                         => '',
+                    'tipo_dia_cantidad'                         => '',
+                    'tipo_dia_corrido'                          => '',
+                    'tipo_observacion'                          => '',
+                    'auditoria_usuario'                         => '',
+                    'auditoria_fecha_hora'                      => '',
+                    'auditoria_ip'                              => ''
+                );
+
+                header("Content-Type: application/json; charset=utf-8");
+                $json = json_encode(array('code' => 204, 'status' => 'ok', 'message' => 'No hay registros', 'data' => $detalle), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+            }
+
+            $stmtMSSQL00->closeCursor();
+            $stmtMSSQL00 = null;
+
+            $stmtMSSQL01->closeCursor();
+            $stmtMSSQL01 = null;
+        } catch (PDOException $e) {
+            header("Content-Type: application/json; charset=utf-8");
+            $json = json_encode(array('code' => 204, 'status' => 'failure', 'message' => 'Error SELECT: '.$e), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+        }
+
+        $connMSSQL  = null;
+        
+        return $json;
+    });
