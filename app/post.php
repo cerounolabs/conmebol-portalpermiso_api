@@ -20,13 +20,15 @@
                 ldap_set_option($ldap_conn, LDAP_OPT_REFERRALS, 0);
 
                 if(@ldap_bind($ldap_conn, $ldap_rdn, $val02)){
-                    $result = "Si se conecto";
+                    $reCode     = 200;
+                    $reMessage  = 'Success LOGIN';
                 } else {
-                    $result = "No se conecto";
+                    $reCode     = 200;
+                    $reMessage  = 'ERROR: Verifique su usuario y contraseña de DOMINIO';
                 }
 
                 header("Content-Type: application/json; charset=utf-8");
-                $json = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success SELECT', 'data' => $result), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+                $json = json_encode(array('code' => $reCode, 'status' => 'ok', 'message' => $reMessage, 'data' => ''), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
             } catch (PDOException $e) {
                 header("Content-Type: application/json; charset=utf-8");
                 $json = json_encode(array('code' => 204, 'status' => 'failure', 'message' => 'Error LOGIN: '.$e), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
