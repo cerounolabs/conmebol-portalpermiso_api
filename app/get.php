@@ -1918,9 +1918,6 @@
 
             $stmtMSSQL00->closeCursor();
             $stmtMSSQL00 = null;
-
-            $stmtMSSQL01->closeCursor();
-            $stmtMSSQL01 = null;
         } catch (PDOException $e) {
             header("Content-Type: application/json; charset=utf-8");
             $json = json_encode(array('code' => 204, 'status' => 'failure', 'message' => 'Error SELECT: '.$e), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
