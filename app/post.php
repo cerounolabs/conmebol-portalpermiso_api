@@ -169,7 +169,7 @@
                 $stmtMSSQL02= $connMSSQL->prepare($sql02);
                 $stmtMSSQL02->execute();
 
-                while ($rowMSSQL02 = $stmtMSSQL01->fetch()) {
+                while ($rowMSSQL02 = $stmtMSSQL02->fetch()) {
                     $stmtMSSQL03->execute([$DOMPARTST, $rowMSSQL02['tipo_codigo'], $rowMSSQL02['tipo_codigo_nombre'], $rowMSSQL02['tipo_codigo_referencia']]);
                     $rowMSSQL03 = $stmtMSSQL03->fetch(PDO::FETCH_ASSOC);
 
