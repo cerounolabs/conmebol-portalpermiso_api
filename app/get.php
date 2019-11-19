@@ -1864,7 +1864,7 @@
                 }
 
                 $stmtMSSQL01= $connMSSQL->prepare($sql01);
-                $stmtMSSQL01->execute([$rowMSSQL00['tipo_permiso_codigo1'], $rowMSSQL00['tipo_permiso_codigo2'], $rowMSSQL00['tipo_permiso_codigo3']]);
+                $stmtMSSQL01->execute([$rowMSSQL00['tipo_permiso_codigo1'], $rowMSSQL00['tipo_permiso_codigo2'], trim($rowMSSQL00['tipo_permiso_codigo3'])]);
 
                 $rowMSSQL01 = $stmtMSSQL01->fetch(PDO::FETCH_ASSOC);
                 $detalle    = array(
