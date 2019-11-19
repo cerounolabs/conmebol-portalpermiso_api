@@ -1849,31 +1849,26 @@
                 switch ($rowMSSQL00['tipo_solicitud_codigo']) {
                     case 'L':
                         $tipo_solicitud_nombre  = 'LICENCIA';
-                        $sql01                  = "SELECT * FROM [CSF_PRUEBA].[dbo].[@A1A_TILC] WHERE Code = ?";
+                        $sql01                  = "SELECT U_NOMBRE AS tipo_permiso_nombre FROM [CSF_PRUEBA].[dbo].[@A1A_TILC] WHERE U_CODIGO = ?";
                         break;
                     
                     case 'P':
                         $tipo_solicitud_nombre  = 'PERMISO';
-                        $sql01                  = "SELECT * FROM [CSF_PRUEBA].[dbo].[@A1A_TIPE] WHERE Code = ?";
+                        $sql01                  = "SELECT U_NOMBRE AS tipo_permiso_nombre FROM [CSF_PRUEBA].[dbo].[@A1A_TIPE] WHERE U_CODIGO = ?";
                         break;
     
                     case 'I':
                         $tipo_solicitud_nombre  = 'INASISTENCIA';
-                        $sql01                  = "SELECT * FROM [CSF_PRUEBA].[dbo].[@A1A_TIIN] WHERE Code = ?";
+                        $sql01                  = "SELECT U_DESAMP AS tipo_permiso_nombre FROM [CSF_PRUEBA].[dbo].[@A1A_TIIN] WHERE U_CODIGO = ?";
                         break;
                 }
 
                 $stmtMSSQL01= $connMSSQL->prepare($sql01);
-                $stmtMSSQL01->execute([$rowMSSQL00['tipo_permiso_codigo1']]);
+                $stmtMSSQL01->execute([trim(strtoupper($rowMSSQL00['tipo_permiso_codigo3']))]);
                 $rowMSSQL01 = $stmtMSSQL01->fetch(PDO::FETCH_ASSOC);
 
-                $tipo_permiso_nombre = $rowMSSQL01;
-                /*
-                while ($rowMSSQL01 = $stmtMSSQL01->fetch()) {
-                    //$tipo_permiso_nombre = trim(strtoupper($rowMSSQL01['tipo_permiso_nombre']));
-                    $tipo_permiso_nombre = 'SI ENTRO';
-                }
-                */
+                $tipo_permiso_nombre = $rowMSSQL01['tipo_permiso_nombre'];
+
                 $detalle    = array(
                     'tipo_permiso_codigo'                       => $rowMSSQL00['tipo_permiso_codigo'],
                     'tipo_estado_codigo'                        => $rowMSSQL00['tipo_estado_codigo'],
