@@ -23,7 +23,7 @@
                     $reCode     = 200;
                     $reMessage  = 'Success LOGIN';
                 } else {
-                    $reCode     = 200;
+                    $reCode     = 204;
                     $reMessage  = 'ERROR: Verifique su usuario y contraseña de DOMINIO';
                 }
 
