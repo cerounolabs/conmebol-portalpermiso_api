@@ -1849,17 +1849,17 @@
                 switch ($rowMSSQL00['tipo_solicitud_codigo']) {
                     case 'L':
                         $tipo_solicitud_nombre  = 'LICENCIA';
-                        $sql01                  = "SELECT U_NOMBRE AS tipo_permiso_nombre FROM dbo.[@A1A_TILC] WHERE Code = ? AND Name = ? AND U_CODIGO = ?";
+                        $sql01                  = "SELECT U_NOMBRE AS tipo_permiso_nombre FROM CFS_PRUEBA.dbo.[@A1A_TILC] WHERE Code = ? AND Name = ? AND U_CODIGO = ?";
                         break;
                     
                     case 'P':
                         $tipo_solicitud_nombre  = 'PERMISO';
-                        $sql01                  = "SELECT U_NOMBRE AS tipo_permiso_nombre FROM dbo.[@A1A_TIPE] WHERE Code = ? AND Name = ? AND U_CODIGO = ?";
+                        $sql01                  = "SELECT U_NOMBRE AS tipo_permiso_nombre FROM CFS_PRUEBA.dbo.[@A1A_TIPE] WHERE Code = ? AND Name = ? AND U_CODIGO = ?";
                         break;
     
                     case 'I':
                         $tipo_solicitud_nombre  = 'INASISTENCIA';
-                        $sql01                  = "SELECT U_DESAMP AS tipo_permiso_nombre FROM dbo.[@A1A_TIIN] WHERE Code = ? AND Name = ? AND U_CODIGO = ?";
+                        $sql01                  = "SELECT U_DESAMP AS tipo_permiso_nombre FROM CFS_PRUEBA.dbo.[@A1A_TIIN] WHERE Code = ? AND Name = ? AND U_CODIGO = ?";
                         break;
                 }
 
