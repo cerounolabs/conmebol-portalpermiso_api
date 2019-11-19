@@ -1865,7 +1865,7 @@
 
                 $stmtMSSQL01= $connMSSQL->prepare($sql01);
                 $stmtMSSQL01->execute([$rowMSSQL00['tipo_permiso_codigo1']]);
-                $rowMSSQL01 = $stmtMSSQL01->fetch(PDO::FETCH_ASSOC)['CODE'];
+                $rowMSSQL01 = $stmtMSSQL01->fetch(PDO::FETCH_ASSOC);
 
                 $tipo_permiso_nombre = $rowMSSQL01;
                 /*
