@@ -1823,7 +1823,7 @@
         a.DOMPARAFH         AS          auditoria_fecha_hora,
         a.DOMPARAIP         AS          auditoria_ip
         
-        FROM [CSF_PERMISO].[adm].[DOMPAR] a
+        FROM [CSF_PERMISOS].[adm].[DOMPAR] a
 
         ORDER BY a.DOMPARTST, a.DOMPARORD";
 
