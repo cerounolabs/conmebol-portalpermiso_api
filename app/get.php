@@ -1894,6 +1894,9 @@
                 );
 
                 $result[]   = $detalle;
+
+                $stmtMSSQL01->closeCursor();
+                $stmtMSSQL01 = null;
             }
 
             if (isset($result)){
