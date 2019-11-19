@@ -1866,10 +1866,11 @@
                 $stmtMSSQL01= $connMSSQL->prepare($sql01);
                 $stmtMSSQL01->execute([$rowMSSQL00['tipo_permiso_codigo1']]);
 
-                $tipo_permiso_nombre = '';
+                $tipo_permiso_nombre = 'NO ENTRO';
                 
                 while ($rowMSSQL01 = $stmtMSSQL01->fetch()) {
-                    $tipo_permiso_nombre = trim(strtoupper($rowMSSQL01['tipo_permiso_nombre']));
+                    //$tipo_permiso_nombre = trim(strtoupper($rowMSSQL01['tipo_permiso_nombre']));
+                    $tipo_permiso_nombre = 'SI ENTRO';
                 }
                 
                 $detalle    = array(
