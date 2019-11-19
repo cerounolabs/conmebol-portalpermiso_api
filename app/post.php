@@ -160,7 +160,7 @@
                     $stmtMSSQL03->execute([$DOMPARTST, $rowMSSQL01['tipo_codigo'], $rowMSSQL01['tipo_codigo_nombre'], $rowMSSQL01['tipo_codigo_referencia']]);
                     $rowMSSQL03 = $stmtMSSQL03->fetch(PDO::FETCH_ASSOC);
 
-                    if (!isset($rowMSSQL03)) {
+                    if (!$rowMSSQL03) {
                         $stmtMSSQL04->execute([$DOMPAREST, $DOMPARTST, $DOMPARORD, $rowMSSQL01['tipo_codigo'], $rowMSSQL01['tipo_codigo_nombre'], $rowMSSQL01['tipo_codigo_referencia'], $DOMPARDIC, $DOMPARDIO, $DOMPAROBS, $DOMPARAUS, $DOMPARAIP]);
                     }
                 }
@@ -173,7 +173,7 @@
                     $stmtMSSQL03->execute([$DOMPARTST, $rowMSSQL02['tipo_codigo'], $rowMSSQL02['tipo_codigo_nombre'], $rowMSSQL02['tipo_codigo_referencia']]);
                     $rowMSSQL03 = $stmtMSSQL03->fetch(PDO::FETCH_ASSOC);
 
-                    if (!isset($rowMSSQL03)) {
+                    if (!$rowMSSQL03) {
                         $stmtMSSQL04->execute([$DOMPAREST, $DOMPARTST, $DOMPARORD, $rowMSSQL02['tipo_codigo'], $rowMSSQL02['tipo_codigo_nombre'], $rowMSSQL02['tipo_codigo_referencia'], $DOMPARDIC, $DOMPARDIO, $DOMPAROBS, $DOMPARAUS, $DOMPARAIP]);
                     }
                 }
