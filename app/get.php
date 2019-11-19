@@ -1868,12 +1868,12 @@
                 $rowMSSQL01 = $stmtMSSQL01->fetch(PDO::FETCH_ASSOC);
 
                 $tipo_permiso_nombre = $rowMSSQL01;
-                
+                /*
                 while ($rowMSSQL01 = $stmtMSSQL01->fetch()) {
                     //$tipo_permiso_nombre = trim(strtoupper($rowMSSQL01['tipo_permiso_nombre']));
                     $tipo_permiso_nombre = 'SI ENTRO';
                 }
-                
+                */
                 $detalle    = array(
                     'tipo_permiso_codigo'                       => $rowMSSQL00['tipo_permiso_codigo'],
                     'tipo_estado_codigo'                        => $rowMSSQL00['tipo_estado_codigo'],
