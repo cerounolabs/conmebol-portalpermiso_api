@@ -131,7 +131,7 @@
             $sql01      = "SELECT a.CODE AS tipo_codigo, a.NAME AS tipo_codigo_nombre, a.U_CODIGO AS tipo_codigo_referencia FROM [CSF_PRUEBA].[dbo].[@A1A_TIPE] a ORDER BY a.U_CODIGO";
             $sql02      = "SELECT a.CODE AS tipo_codigo, a.NAME AS tipo_codigo_nombre, a.U_CODIGO AS tipo_codigo_referencia FROM [CSF_PRUEBA].[dbo].[@A1A_TIIN] a ORDER BY a.U_CODIGO";
             $sql03      = "SELECT * FROM [adm].[DOMPAR] WHERE DOMPARTST = ? AND DOMPARPC1 = ? AND DOMPARPC2 = ? AND DOMPARPC3 = ?";
-            $sql04      = "INSERT INTO [adm].[DOMPAR] (DOMPAREST, DOMPARTST, DOMPARORD, DOMPARPC1, DOMPARPC2, DOMPARPC3, DOMPARDIC, DOMPARDIO, DOMPAROBS, DOMPARAUS, DOMPARAFH, DOMPARAIP) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, GETDATE(), ?)";
+            $sql04      = "INSERT INTO [CSF_PERMISOS].[adm].[DOMPAR] (DOMPAREST, DOMPARTST, DOMPARORD, DOMPARPC1, DOMPARPC2, DOMPARPC3, DOMPARDIC, DOMPARDIO, DOMPAROBS, DOMPARAUS, DOMPARAFH, DOMPARAIP) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, GETDATE(), ?)";
 
             try {
                 $connMSSQL  = getConnectionMSSQL();
