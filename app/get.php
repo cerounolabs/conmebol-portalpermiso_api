@@ -1866,7 +1866,7 @@
                 $stmtMSSQL01= $connMSSQL->prepare($sql01);
                 $stmtMSSQL01->execute([$rowMSSQL00['tipo_permiso_codigo1']]);
 
-                $tipo_permiso_nombre = $rowMSSQL00['tipo_permiso_codigo1'];
+                $tipo_permiso_nombre = $stmtMSSQL01;
                 
                 while ($rowMSSQL01 = $stmtMSSQL01->fetch()) {
                     //$tipo_permiso_nombre = trim(strtoupper($rowMSSQL01['tipo_permiso_nombre']));
