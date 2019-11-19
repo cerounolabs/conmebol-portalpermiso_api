@@ -1831,8 +1831,8 @@
             $connMSSQL  = getConnectionMSSQL();
 
             $stmtMSSQL00= $connMSSQL->prepare($sql00);
-            $stmtMSSQL00->execute(); 
-
+            $stmtMSSQL00->execute();
+            
             while ($rowMSSQL00 = $stmtMSSQL00->fetch()) {
                 $sql01  = '';
 
@@ -1849,23 +1849,23 @@
                 switch ($rowMSSQL00['tipo_solicitud_codigo']) {
                     case 'L':
                         $tipo_solicitud_nombre  = 'LICENCIA';
-                        $sql01                  = "SELECT U_NOMBRE AS tipo_permiso_nombre FROM [CSF_PRUEBA].[dbo].[@A1A_TILC] WHERE Code = ?";
+                        $sql01                  = "SELECT * FROM [CSF_PRUEBA].[dbo].[@A1A_TILC] WHERE Code = ?";
                         break;
                     
                     case 'P':
                         $tipo_solicitud_nombre  = 'PERMISO';
-                        $sql01                  = "SELECT U_NOMBRE AS tipo_permiso_nombre FROM [CSF_PRUEBA].[dbo].[@A1A_TIPE] WHERE Code = ?";
+                        $sql01                  = "SELECT * FROM [CSF_PRUEBA].[dbo].[@A1A_TIPE] WHERE Code = ?";
                         break;
     
                     case 'I':
                         $tipo_solicitud_nombre  = 'INASISTENCIA';
-                        $sql01                  = "SELECT U_DESAMP AS tipo_permiso_nombre FROM [CSF_PRUEBA].[dbo].[@A1A_TIIN] WHERE Code = ?";
+                        $sql01                  = "SELECT * FROM [CSF_PRUEBA].[dbo].[@A1A_TIIN] WHERE Code = ?";
                         break;
                 }
 
                 $stmtMSSQL01= $connMSSQL->prepare($sql01);
                 $stmtMSSQL01->execute([$rowMSSQL00['tipo_permiso_codigo1']]);
-                $rowMSSQL01 = $stmtMSSQL01->fetch(PDO::FETCH_ASSOC);
+                $rowMSSQL01 = $stmtMSSQL01->fetch(PDO::FETCH_ASSOC)['CODE'];
 
                 $tipo_permiso_nombre = $rowMSSQL01;
                 /*
