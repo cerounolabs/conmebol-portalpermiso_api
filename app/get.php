@@ -1849,24 +1849,29 @@
                 switch ($rowMSSQL00['tipo_solicitud_codigo']) {
                     case 'L':
                         $tipo_solicitud_nombre  = 'LICENCIA';
-                        $sql01                  = "SELECT U_NOMBRE FROM [CSF_PRUEBA].[dbo].[@A1A_TILC] WHERE Code = ?";
+                        $sql01                  = "SELECT U_NOMBRE AS tipo_permiso_nombre FROM [CSF_PRUEBA].[dbo].[@A1A_TILC] WHERE Code = ?";
                         break;
                     
                     case 'P':
                         $tipo_solicitud_nombre  = 'PERMISO';
-                        $sql01                  = "SELECT U_NOMBRE FROM [CSF_PRUEBA].[dbo].[@A1A_TIPE] WHERE Code = ?";
+                        $sql01                  = "SELECT U_NOMBRE AS tipo_permiso_nombre FROM [CSF_PRUEBA].[dbo].[@A1A_TIPE] WHERE Code = ?";
                         break;
     
                     case 'I':
                         $tipo_solicitud_nombre  = 'INASISTENCIA';
-                        $sql01                  = "SELECT U_DESAMP FROM [CSF_PRUEBA].[dbo].[@A1A_TIIN] WHERE Code = ?";
+                        $sql01                  = "SELECT U_DESAMP AS tipo_permiso_nombre FROM [CSF_PRUEBA].[dbo].[@A1A_TIIN] WHERE Code = ?";
                         break;
                 }
 
                 $stmtMSSQL01= $connMSSQL->prepare($sql01);
                 $stmtMSSQL01->execute([$rowMSSQL00['tipo_permiso_codigo1']]);
 
-                $rowMSSQL01 = $stmtMSSQL01->fetch(PDO::FETCH_ASSOC);
+                $tipo_permiso_nombre = '';
+                
+                while ($rowMSSQL01 = $stmtMSSQL01->fetch()) {
+                    $tipo_permiso_nombre = trim(strtoupper($rowMSSQL01['tipo_permiso_nombre']));
+                }
+                
                 $detalle    = array(
                     'tipo_permiso_codigo'                       => $rowMSSQL00['tipo_permiso_codigo'],
                     'tipo_estado_codigo'                        => $rowMSSQL00['tipo_estado_codigo'],
@@ -1876,7 +1881,7 @@
                     'tipo_permiso_codigo1'                      => $rowMSSQL00['tipo_permiso_codigo1'],
                     'tipo_permiso_codigo2'                      => $rowMSSQL00['tipo_permiso_codigo2'],
                     'tipo_permiso_codigo3'                      => trim(strtoupper($rowMSSQL00['tipo_permiso_codigo3'])),
-                    'tipo_permiso_nombre'                       => trim(strtoupper($rowMSSQL01[0])),
+                    'tipo_permiso_nombre'                       => $tipo_permiso_nombre,
                     'tipo_orden_numero'                         => $rowMSSQL00['tipo_orden_numero'],
                     'tipo_dia_cantidad'                         => $rowMSSQL00['tipo_dia_cantidad'],
                     'tipo_dia_corrido'                          => trim(strtoupper($rowMSSQL00['tipo_dia_corrido'])),
