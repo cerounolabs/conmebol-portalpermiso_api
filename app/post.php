@@ -13,6 +13,8 @@
 
         if (isset($val01) && isset($val02) && isset($val03)) {
             try {
+                $reCode     = 0;
+                $reMessage  = '';
                 $ldap_conn  = ldap_connect($server);
                 $ldap_rdn   = $val01;
 
