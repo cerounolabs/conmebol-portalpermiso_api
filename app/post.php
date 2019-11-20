@@ -17,7 +17,7 @@
                 $dn_LDAP          = "dc=conmebol,dc=com";
                 $usuario_LDAP     = $val01;
                 $contrasena_LDAP  = $val02;
-                $filtro_LDAP      = '(&(objectClass=user)(objectCategory=person)(cn='.$usuario_LDAP.'))';
+                $filtro_LDAP      = '(&(objectClass=user)(objectCategory=person)(samaccountname='.$usuario_LDAP.'))';
                 $atributo_LDAP    = array('givenname', 'userprincipalname', 'samaccountname', 'sn' , 'postalcode');
                 $conectado_LDAP   = ldap_connect($servidor_LDAP);
 
