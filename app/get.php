@@ -2347,30 +2347,6 @@
         $val01      = $request->getAttribute('codigo');
         
         if (isset($val01)) {
-            $sql00  = "SELECT
-                a.CedulaEmpleado            AS          documento,
-                a.ApellidoPaterno           AS          apellido_1,
-                a.ApellidoMaterno           AS          apellido_2,
-                a.PrimerNombre              AS          nombre_1,
-                a.SegundoNombre             AS          nombre_2,
-                a.NombreEmpleado            AS          nombre_completo,
-                a.Sexo                      AS          tipo_sexo_codigo,
-                a.EstadoCivil               AS          estado_civil_codigo,
-                a.Email                     AS          email,
-                a.FechaNacimiento           AS          fecha_nacimiento,
-                a.CodigoCargo               AS          cargo_codigo,
-                a.Cargo                     AS          cargo_nombre,
-                a.CodigoGerencia            AS          gerencia_codigo,
-                a.Gerencia                  AS          gerencia_nombre,
-                a.CodigoDepto               AS          departamento_codigo,
-                a.Departamento              AS          departamento_nombre,         
-                a.CodCargoSuperior          AS          superior_cargo_codigo,
-                a.NombreCargoSuperior       AS          superior_cargo_nombre
-
-                FROM [CSF_PRUEBA].[dbo].[empleados_AxisONE] a
-
-                WHERE a.CedulaEmpleado = ?";
-
             $sql01  = "SELECT
                 a.CedulaEmpleado            AS          documento,
                 a.ApellidoPaterno           AS          apellido_1,
@@ -2398,68 +2374,9 @@
 
             try {
                 $connMSSQL  = getConnectionMSSQL();
-
-                $stmtMSSQL00= $connMSSQL->prepare($sql00);
-                $stmtMSSQL00->execute([$val01]);
                 
                 $stmtMSSQL01= $connMSSQL->prepare($sql01);
                 $stmtMSSQL01->execute([$val01]);
-
-                while ($rowMSSQL00 = $stmtMSSQL00->fetch()) {
-                    switch ($rowMSSQL00['tipo_sexo_codigo']) {
-                        case 'M':
-                            $tipo_sexo_nombre = 'MASCULINO';
-                            break;
-                        
-                        case 'F':
-                            $tipo_sexo_nombre = 'FEMENINO';
-                            break;
-                    }
-
-                    switch ($rowMSSQL00['estado_civil_codigo']) {
-                        case 'S':
-                            $estado_civil_nombre = 'SOLTERO/A';
-                            break;
-                        
-                        case 'C':
-                            $estado_civil_nombre = 'CASADO/A';
-                            break;
-
-                        case 'D':
-                            $estado_civil_nombre = 'DIVORCIADO/A';
-                            break;
-
-                        case 'V':
-                            $estado_civil_nombre = 'VIUDO/A';
-                            break;
-                    }
-
-                    $detalle    = array(
-                        'documento'                     => $rowMSSQL00['documento'],
-                        'apellido_1'                    => trim(strtoupper($rowMSSQL00['apellido_1'])),
-                        'apellido_2'                    => trim(strtoupper($rowMSSQL00['apellido_2'])),
-                        'nombre_1'                      => trim(strtoupper($rowMSSQL00['nombre_1'])),
-                        'nombre_2'                      => trim(strtoupper($rowMSSQL00['nombre_2'])),
-                        'nombre_completo'               => trim(strtoupper($rowMSSQL00['nombre_completo'])),
-                        'tipo_sexo_codigo'              => trim(strtoupper($rowMSSQL00['tipo_sexo_codigo'])),
-                        'tipo_sexo_nombre'              => trim(strtoupper($tipo_sexo_nombre)),
-                        'estado_civil_codigo'           => trim(strtoupper($rowMSSQL00['estado_civil_codigo'])),
-                        'estado_civil_nombre'           => trim(strtoupper($estado_civil_nombre)),
-                        'email'                         => trim(strtolower($rowMSSQL00['email'])),
-                        'fecha_nacimiento'              => $rowMSSQL00['fecha_nacimiento'],
-                        'fecha_nacimiento_2'            => date("d/m/Y", strtotime($rowMSSQL00['fecha_nacimiento'])),
-                        'cargo_codigo'                  => $rowMSSQL00['cargo_codigo'],
-                        'cargo_nombre'                  => trim(strtoupper($rowMSSQL00['cargo_nombre'])),
-                        'gerencia_codigo'               => $rowMSSQL00['gerencia_codigo'],
-                        'gerencia_nombre'               => trim(strtoupper($rowMSSQL00['gerencia_nombre'])),
-                        'departamento_codigo'           => $rowMSSQL00['departamento_codigo'],
-                        'departamento_nombre'           => trim(strtoupper($rowMSSQL00['departamento_nombre'])),
-                        'superior_cargo_codigo'         => $rowMSSQL00['superior_cargo_codigo'],
-                        'superior_cargo_nombre'         => trim(strtoupper($rowMSSQL00['superior_cargo_nombre']))
-                    );
-
-                    $result[]   = $detalle;
-                }
 
                 while ($rowMSSQL01 = $stmtMSSQL01->fetch()) {
                     switch ($rowMSSQL01['tipo_sexo_codigo']) {
@@ -2548,9 +2465,6 @@
                     header("Content-Type: application/json; charset=utf-8");
                     $json = json_encode(array('code' => 204, 'status' => 'ok', 'message' => 'No hay registros', 'data' => $detalle), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
                 }
-
-                $stmtMSSQL00->closeCursor();
-                $stmtMSSQL00 = null;
 
                 $stmtMSSQL01->closeCursor();
                 $stmtMSSQL01 = null;
