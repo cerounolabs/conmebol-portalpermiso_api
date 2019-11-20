@@ -9,28 +9,92 @@
         $val05      = $request->getParsedBody()['usuario_var05'];
         $val06      = $request->getParsedBody()['usuario_var06'];
         $val07      = $request->getParsedBody()['usuario_var07'];
-        $server     = "ldap://172.16.50.1";
 
         if (isset($val01) && isset($val02) && isset($val03)) {
             try {
-                $reCode     = 0;
-                $reMessage  = '';
-                $ldap_conn  = ldap_connect($server);
-                $ldap_rdn   = $val01;
+                $servidor_LDAP    = "172.16.50.1";
+                $dominio_LDAP     = "conmebol.com";
+                $dn_LDAP          = "dc=conmebol,dc=com";
+                $usuario_LDAP     = $val01;
+                $contrasena_LDAP  = $val02;
+                $filtro_LDAP      = '(&(objectClass=user)(objectCategory=person)(cn='.$usuario_LDAP.'))';
+                $atributo_LDAP    = array('givenname', 'userprincipalname', 'samaccountname', 'sn' , 'postalcode');
+                $conectado_LDAP   = ldap_connect($servidor_LDAP);
 
-                ldap_set_option($ldap_conn, LDAP_OPT_PROTOCOL_VERSION, 3);
-                ldap_set_option($ldap_conn, LDAP_OPT_REFERRALS, 0);
+                ldap_set_option($conectado_LDAP, LDAP_OPT_PROTOCOL_VERSION, 3);
+                ldap_set_option($conectado_LDAP, LDAP_OPT_REFERRALS, 0);
 
-                if(@ldap_bind($ldap_conn, $ldap_rdn, $val02)){
-                    $reCode     = 200;
-                    $reMessage  = 'Success LOGIN';
+                if ($conectado_LDAP) {
+                    $autenticado_LDAP = ldap_bind($conectado_LDAP, $usuario_LDAP."@".$dominio_LDAP, $contrasena_LDAP);
+                    
+                    if ($autenticado_LDAP) {
+                        $resultado_LDAP = ldap_search($conectado_LDAP, $dn_LDAP, $filtro_LDAP);
+                        $numero_LDAP    = ldap_count_entries($conectado_LDAP, $resultado_LDAP);
+                        $entrada_LDAP   = ldap_get_entries($conectado_LDAP, $resultado_LDAP);
+
+                        foreach($entrada_LDAP as $i){
+                            foreach($atributo_LDAP as $j){
+                                if(isset($i[$j])){
+                                    switch ($j) {
+                                        case 'givenname':
+                                            $user_var01 = strtoupper(htmlspecialchars($i[$j][0]));
+                                            break;
+                                        case 'userprincipalname':
+                                            $user_var02 = strtolower(htmlspecialchars($i[$j][0]));
+                                            break;
+                                        case 'samaccountname':
+                                            $user_var03 = strtoupper(htmlspecialchars($i[$j][0]));
+                                            break;
+                                        case 'sn':
+                                            $user_var04 = strtoupper(htmlspecialchars($i[$j][0]));
+                                            break;
+                                        case 'postalcode':
+                                            $user_var05 = strtoupper(htmlspecialchars($i[$j][0]));
+                                            break;
+                                    }
+                                }
+                            }
+                        }
+
+                        $detalle    = array(
+                            'user_var01' => $user_var01,
+                            'user_var02' => $user_var02,
+                            'user_var03' => $user_var03,
+                            'user_var04' => $user_var04,
+                            'user_var05' => $user_var05
+                        );
+
+                        $reCode     = 200;
+                        $reMessage  = 'Success LOGIN';
+
+                        ldap_close($conectado_LDAP);
+                    } else {
+                        $reCode     = 201;
+                        $reMessage  = 'ERROR: Verifique su usuario y su contraseña introducida';
+                        $detalle    = array(
+                            'user_var01' => '',
+                            'user_var02' => '',
+                            'user_var03' => '',
+                            'user_var04' => '',
+                            'user_var05' => ''
+                        );
+                    }
                 } else {
                     $reCode     = 204;
-                    $reMessage  = 'ERROR: Verifique su usuario y contraseña de DOMINIO';
+                    $reMessage  = 'ERROR: Inconveniente al acceder al Servidor';
+                    $detalle    = array(
+                        'user_var01' => '',
+                        'user_var02' => '',
+                        'user_var03' => '',
+                        'user_var04' => '',
+                        'user_var05' => ''
+                    );
                 }
 
+                $result[]   = $detalle;
+
                 header("Content-Type: application/json; charset=utf-8");
-                $json = json_encode(array('code' => $reCode, 'status' => 'ok', 'message' => $reMessage, 'data' => ''), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+                $json = json_encode(array('code' => $reCode, 'status' => 'ok', 'message' => $reMessage, 'data' => $result), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
             } catch (PDOException $e) {
                 header("Content-Type: application/json; charset=utf-8");
                 $json = json_encode(array('code' => 204, 'status' => 'failure', 'message' => 'Error LOGIN: '.$e), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
@@ -40,9 +104,6 @@
             $json = json_encode(array('code' => 400, 'status' => 'error', 'message' => 'Verifique, algún campo esta vacio.'), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
         }
 
-        $connMSSQL  = null;
-        $connMYSQL  = null;
-        
         return $json;
     });
 
