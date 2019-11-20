@@ -2098,9 +2098,7 @@
 
                 FROM [CSF_PRUEBA].[dbo].[empleados_AxisONE] a
 
-                WHERE a.CedulaEmpleado = ? AND 
-
-                ORDER BY a.CodigoCargo";
+                WHERE a.CedulaEmpleado = ?";
 
             $sql01  = "SELECT
                 a.CedulaEmpleado            AS          documento,
@@ -2125,9 +2123,7 @@
                 FROM [CSF_PRUEBA].[dbo].[empleados_AxisONE] a
                 INNER JOIN [CSF_PRUEBA].[dbo].[empleados_AxisONE] b ON a.CodigoCargo = b.CodCargoSuperior
 
-                WHERE b.CedulaEmpleado = ? AND 
-
-                ORDER BY a.CodigoCargo";
+                WHERE b.CedulaEmpleado = ?";
 
             try {
                 $connMSSQL  = getConnectionMSSQL();
