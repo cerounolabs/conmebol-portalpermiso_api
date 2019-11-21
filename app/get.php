@@ -2481,3 +2481,146 @@
         
         return $json;
     });
+
+    $app->get('/v1/200/solicitud/{codigo}', function($request) {
+        require __DIR__.'/../src/connect.php';
+        
+        $val01      = $request->getAttribute('codigo');
+        
+        if (isset($val01)) {
+            $sql01  = "SELECT
+                a.SOLFICCOD         AS          solicitud_codigo,
+                a.SOLFICEST         AS          solicitud_estado_codigo,
+                a.SOLFICDOC         AS          solicitud_documento,
+                a.SOLFICFE1         AS          solicitud_fecha_desde,
+                a.SOLFICFE2         AS          solicitud_fecha_hasta,
+                a.SOLFICFEC         AS          solicitud_fecha_cantidad,
+                a.SOLFICHO1         AS          solicitud_hora_desde,
+                a.SOLFICHO2         AS          solicitud_hora_hasta,
+                a.SOLFICHOC         AS          solicitud_hora_cantidad,
+                a.SOLFICOB1         AS          solicitud_observacion_colaborador,
+                a.SOLFICOB2         AS          solicitud_observacion_aprobador,
+                a.SOLFICOB3         AS          solicitud_observacion_talento,
+                a.SOLFICUSC         AS          solicitud_usuario_colaborador,
+                a.SOLFICFHC         AS          solicitud_fecha_hora_colaborador,
+                a.SOLFICIPC         AS          solicitud_ip_colaborador,         
+                a.SOLFICUSA         AS          solicitud_usuario_aprobador,
+                a.SOLFICFHA         AS          solicitud_fecha_hora_aprobador,
+                a.SOLFICIPA         AS          solicitud_ip_aprobador,
+                a.SOLFICUST         AS          solicitud_usuario_talento,
+                a.SOLFICFHT         AS          solicitud_fecha_hora_talento,
+                a.SOLFICIPT         AS          solicitud_ip_talento,
+                a.SOLFICAUS         AS          auditoria_usuario,
+                a.SOLFICAFH         AS          auditoria_fecha_hora,
+                a.SOLFICAIP         AS          auditoria_ip,
+
+                b.DOMPARCOD         AS          tipo_solicitud_codigo
+
+                FROM [CSF_PERMISOS].[adm].[SOLFIC] a
+                INNER JOIN [CSF_PERMISOS].[adm].[DOMPAR] b ON a.SOLFICTST = b.DOMPARCOD
+
+                WHERE a.SOLFICDOC = ?";
+
+            try {
+                $connMSSQL  = getConnectionMSSQL();
+                
+                $stmtMSSQL01= $connMSSQL->prepare($sql01);
+                $stmtMSSQL01->execute([$val01]);
+
+                while ($rowMSSQL01 = $stmtMSSQL01->fetch()) {
+                    switch ($rowMSSQL01['solicitud_estado_codigo']) {
+                        case 'I':
+                            $solicitud_estado_nombre = 'INGRESADO';
+                            break;
+                        
+                        case 'A':
+                            $solicitud_estado_nombre = 'AUTORIZADO';
+                            break;
+                        
+                        case 'P':
+                            $solicitud_estado_nombre = 'APROBADO';
+                            break;
+                    }
+
+                    $detalle    = array(
+                        'solicitud_codigo'                  => $rowMSSQL01['solicitud_codigo'],
+                        'solicitud_estado_codigo'           => $rowMSSQL01['solicitud_estado_codigo'],
+                        'solicitud_estado_nombre'           => trim(strtoupper($solicitud_estado_nombre)),
+                        'solicitud_documento'               => trim(strtoupper($rowMSSQL01['solicitud_documento'])),
+                        'solicitud_fecha_desde'             => date("d/m/Y", strtotime($rowMSSQL01['solicitud_fecha_desde'])),
+                        'solicitud_fecha_hasta'             => date("d/m/Y", strtotime($rowMSSQL01['solicitud_fecha_hasta'])),
+                        'solicitud_fecha_cantidad'          => $rowMSSQL01['solicitud_fecha_cantidad'],
+                        'solicitud_hora_desde'              => trim(strtoupper($rowMSSQL01['solicitud_hora_desde'])),
+                        'solicitud_hora_hasta'              => trim(strtoupper($rowMSSQL01['solicitud_hora_hasta'])),
+                        'solicitud_hora_cantidad'           => $rowMSSQL01['solicitud_hora_cantidad'],
+                        'solicitud_usuario_colaborador'     => trim(strtoupper($rowMSSQL01['solicitud_usuario_colaborador'])),
+                        'solicitud_fecha_hora_colaborador'  => date("d/m/Y", strtotime($rowMSSQL01['solicitud_fecha_hora_colaborador'])),
+                        'solicitud_ip_colaborador'          => trim(strtoupper($rowMSSQL01['solicitud_ip_colaborador'])),
+                        'solicitud_observacion_colaborador' => trim(strtoupper($rowMSSQL01['solicitud_observacion_colaborador'])),
+                        'solicitud_usuario_aprobador'       => trim(strtoupper($rowMSSQL01['solicitud_usuario_aprobador'])),
+                        'solicitud_fecha_hora_aprobador'    => date("d/m/Y", strtotime($rowMSSQL01['solicitud_fecha_hora_aprobador'])),
+                        'solicitud_ip_aprobador'            => trim(strtoupper($rowMSSQL01['solicitud_ip_aprobador'])),
+                        'solicitud_observacion_aprobador'   => trim(strtoupper($rowMSSQL01['solicitud_observacion_aprobador'])),
+                        'solicitud_usuario_talento'         => trim(strtoupper($rowMSSQL01['solicitud_usuario_talento'])),
+                        'solicitud_fecha_hora_talento'      => date("d/m/Y", strtotime($rowMSSQL01['solicitud_fecha_hora_talento'])),
+                        'solicitud_ip_talento'              => trim(strtoupper($rowMSSQL01['solicitud_ip_talento'])),
+                        'solicitud_observacion_talento'     => trim(strtoupper($rowMSSQL01['solicitud_observacion_talento'])),
+                        'auditoria_usuario'                 => trim(strtoupper($rowMSSQL01['auditoria_usuario'])),
+                        'auditoria_fecha_hora'              => date("d/m/Y", strtotime($rowMSSQL01['auditoria_fecha_hora'])),
+                        'auditoria_ip'                      => trim(strtoupper($rowMSSQL01['auditoria_ip']))
+                    );
+
+                    $result[]   = $detalle;
+                }
+
+                if (isset($result)){
+                    header("Content-Type: application/json; charset=utf-8");
+                    $json = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success SELECT', 'data' => $result), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+                } else {
+                    $detalle    = array(
+                        'solicitud_codigo'                  => '',
+                        'solicitud_estado_codigo'           => '',
+                        'solicitud_estado_nombre'           => '',
+                        'solicitud_documento'               => '',
+                        'solicitud_fecha_desde'             => '',
+                        'solicitud_fecha_hasta'             => '',
+                        'solicitud_fecha_cantidad'          => '',
+                        'solicitud_hora_desde'              => '',
+                        'solicitud_hora_hasta'              => '',
+                        'solicitud_hora_cantidad'           => '',
+                        'solicitud_usuario_colaborador'     => '',
+                        'solicitud_fecha_hora_colaborador'  => '',
+                        'solicitud_ip_colaborador'          => '',
+                        'solicitud_observacion_colaborador' => '',
+                        'solicitud_usuario_aprobador'       => '',
+                        'solicitud_fecha_hora_aprobador'    => '',
+                        'solicitud_ip_aprobador'            => '',
+                        'solicitud_observacion_aprobador'   => '',
+                        'solicitud_usuario_talento'         => '',
+                        'solicitud_fecha_hora_talento'      => '',
+                        'solicitud_ip_talento'              => '',
+                        'solicitud_observacion_talento'     => '',
+                        'auditoria_usuario'                 => '',
+                        'auditoria_fecha_hora'              => '',
+                        'auditoria_ip'                      => ''
+                    );
+
+                    header("Content-Type: application/json; charset=utf-8");
+                    $json = json_encode(array('code' => 204, 'status' => 'ok', 'message' => 'No hay registros', 'data' => $detalle), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+                }
+
+                $stmtMSSQL01->closeCursor();
+                $stmtMSSQL01 = null;
+            } catch (PDOException $e) {
+                header("Content-Type: application/json; charset=utf-8");
+                $json = json_encode(array('code' => 204, 'status' => 'failure', 'message' => 'Error SELECT: '.$e), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+            }
+        } else {
+            header("Content-Type: application/json; charset=utf-8");
+            $json = json_encode(array('code' => 400, 'status' => 'error', 'message' => 'Verifique, algún campo esta vacio.'), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+        }
+
+        $connMSSQL  = null;
+        
+        return $json;
+    });
