@@ -18,7 +18,7 @@
                 $usuario_LDAP     = $val01;
                 $contrasena_LDAP  = $val02;
                 $filtro_LDAP      = '(&(objectClass=user)(objectCategory=person)(samaccountname='.$usuario_LDAP.'))';
-                $atributo_LDAP    = array('givenname', 'userprincipalname', 'samaccountname', 'sn' , 'postalcode');
+                $atributo_LDAP    = array('givenname', 'userprincipalname', 'samaccountname', 'sn', 'postalcode', 'photo');
                 $conectado_LDAP   = ldap_connect($servidor_LDAP);
 
                 ldap_set_option($conectado_LDAP, LDAP_OPT_PROTOCOL_VERSION, 3);
@@ -51,6 +51,10 @@
                                         case 'postalcode':
                                             $user_var05 = strtoupper(htmlspecialchars($i[$j][0]));
                                             break;
+
+                                        case 'photo':
+                                            $user_var06 = strtoupper(htmlspecialchars($i[$j][0]));
+                                            break;
                                     }
                                 }
                             }
@@ -61,7 +65,8 @@
                             'user_var02' => $user_var02,
                             'user_var03' => $user_var03,
                             'user_var04' => $user_var04,
-                            'user_var05' => $user_var05
+                            'user_var05' => $user_var05,
+                            'user_var06' => $user_var06
                         );
 
                         $reCode     = 200;
@@ -76,7 +81,8 @@
                             'user_var02' => '',
                             'user_var03' => '',
                             'user_var04' => '',
-                            'user_var05' => ''
+                            'user_var05' => '',
+                            'user_var06' => ''
                         );
                     }
                 } else {
@@ -87,7 +93,8 @@
                         'user_var02' => '',
                         'user_var03' => '',
                         'user_var04' => '',
-                        'user_var05' => ''
+                        'user_var05' => '',
+                        'user_var06' => ''
                     );
                 }
 
