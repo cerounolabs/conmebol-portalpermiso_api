@@ -2544,6 +2544,30 @@
 
                 WHERE a.SOLFICDOC = ?";
 
+            $sql03  = "SELECT
+                a.CedulaEmpleado            AS          documento,
+                a.ApellidoPaterno           AS          apellido_1,
+                a.ApellidoMaterno           AS          apellido_2,
+                a.PrimerNombre              AS          nombre_1,
+                a.SegundoNombre             AS          nombre_2,
+                a.NombreEmpleado            AS          nombre_completo,
+                a.Sexo                      AS          tipo_sexo_codigo,
+                a.EstadoCivil               AS          estado_civil_codigo,
+                a.Email                     AS          email,
+                a.FechaNacimiento           AS          fecha_nacimiento,
+                a.CodigoCargo               AS          cargo_codigo,
+                a.Cargo                     AS          cargo_nombre,
+                a.CodigoGerencia            AS          gerencia_codigo,
+                a.Gerencia                  AS          gerencia_nombre,
+                a.CodigoDepto               AS          departamento_codigo,
+                a.Departamento              AS          departamento_nombre,         
+                a.CodCargoSuperior          AS          superior_cargo_codigo,
+                a.NombreCargoSuperior       AS          superior_cargo_nombre
+
+                FROM [CSF_PRUEBA].[dbo].[empleados_AxisONE] 
+
+                WHERE a.CedulaEmpleado = ?";
+
             try {
                 $connMSSQL  = getConnectionMSSQL();
                 
@@ -2590,7 +2614,12 @@
                     $stmtMSSQL02->execute([trim(strtoupper($rowMSSQL01['tipo_permiso_codigo3']))]);
                     $rowMSSQL02 = $stmtMSSQL02->fetch(PDO::FETCH_ASSOC);
 
-                    $tipo_permiso_nombre = $rowMSSQL02['tipo_permiso_nombre'];
+                    $stmtMSSQL03= $connMSSQL->prepare($sql03);
+                    $stmtMSSQL03->execute([trim(strtoupper($rowMSSQL01['solicitud_documento']))]);
+                    $rowMSSQL03 = $stmtMSSQL03->fetch(PDO::FETCH_ASSOC);
+
+                    $tipo_permiso_nombre= $rowMSSQL02['tipo_permiso_nombre'];
+                    $solicitud_persona  = $rowMSSQL03['nombre_completo'];
 
                     $detalle    = array(
                         'tipo_permiso_codigo'               => $rowMSSQL01['tipo_permiso_codigo'],
@@ -2599,6 +2628,7 @@
                         'solicitud_estado_codigo'           => $rowMSSQL01['solicitud_estado_codigo'],
                         'solicitud_estado_nombre'           => trim(strtoupper($solicitud_estado_nombre)),
                         'solicitud_documento'               => trim(strtoupper($rowMSSQL01['solicitud_documento'])),
+                        'solicitud_persona'                 => trim(strtoupper($rowMSSQL01['solicitud_persona'])),
                         'solicitud_fecha_desde'             => date("d/m/Y", strtotime($rowMSSQL01['solicitud_fecha_desde'])),
                         'solicitud_fecha_hasta'             => date("d/m/Y", strtotime($rowMSSQL01['solicitud_fecha_hasta'])),
                         'solicitud_fecha_cantidad'          => $rowMSSQL01['solicitud_fecha_cantidad'],
@@ -2665,6 +2695,12 @@
 
                 $stmtMSSQL01->closeCursor();
                 $stmtMSSQL01 = null;
+
+                $stmtMSSQL02->closeCursor();
+                $stmtMSSQL02 = null;
+
+                $stmtMSSQL03->closeCursor();
+                $stmtMSSQL03 = null;
             } catch (PDOException $e) {
                 header("Content-Type: application/json; charset=utf-8");
                 $json = json_encode(array('code' => 204, 'status' => 'failure', 'message' => 'Error SELECT: '.$e), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
