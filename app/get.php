@@ -2593,7 +2593,7 @@
                     $tipo_permiso_nombre = $rowMSSQL02['tipo_permiso_nombre'];
 
                     $detalle    = array(
-                        'tipo_solicitud_codigo'             => $rowMSSQL01['tipo_solicitud_codigo'],
+                        'tipo_permiso_codigo'               => $rowMSSQL01['tipo_permiso_codigo'],
                         'tipo_permiso_nombre'               => trim(strtoupper($tipo_permiso_nombre)),
                         'solicitud_codigo'                  => $rowMSSQL01['solicitud_codigo'],
                         'solicitud_estado_codigo'           => $rowMSSQL01['solicitud_estado_codigo'],
