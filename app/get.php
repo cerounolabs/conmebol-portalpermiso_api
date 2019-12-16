@@ -2526,7 +2526,18 @@
                 a.SOLFICAFH         AS          auditoria_fecha_hora,
                 a.SOLFICAIP         AS          auditoria_ip,
 
-                b.DOMPARCOD         AS          tipo_solicitud_codigo
+                b.DOMPARCOD         AS          tipo_permiso_codigo,
+                b.DOMPAREST         AS          tipo_estado_codigo,
+                b.DOMPARTST         AS          tipo_solicitud_codigo,
+                b.DOMPARPC1         AS          tipo_permiso_codigo1,
+                b.DOMPARPC2         AS          tipo_permiso_codigo2,
+                b.DOMPARPC3         AS          tipo_permiso_codigo3,
+                b.DOMPARORD         AS          tipo_orden_numero,
+                b.DOMPARDIC         AS          tipo_dia_cantidad,
+                b.DOMPARDIO         AS          tipo_dia_corrido,
+                b.DOMPARDIU         AS          tipo_dia_unidad,
+                b.DOMPARADJ         AS          tipo_archivo_adjunto,
+                b.DOMPAROBS         AS          tipo_observacion
 
                 FROM [CSF_PERMISOS].[adm].[SOLFIC] a
                 INNER JOIN [CSF_PERMISOS].[adm].[DOMPAR] b ON a.SOLFICTST = b.DOMPARCOD
@@ -2558,7 +2569,32 @@
                             break;
                     }
 
+                    switch ($rowMSSQL01['tipo_solicitud_codigo']) {
+                        case 'L':
+                            $tipo_solicitud_nombre  = 'LICENCIA';
+                            $sql02                  = "SELECT U_NOMBRE AS tipo_permiso_nombre FROM [CSF_PRUEBA].[dbo].[@A1A_TILC] WHERE U_CODIGO = ?";
+                            break;
+                        
+                        case 'P':
+                            $tipo_solicitud_nombre  = 'PERMISO';
+                            $sql02                  = "SELECT U_NOMBRE AS tipo_permiso_nombre FROM [CSF_PRUEBA].[dbo].[@A1A_TIPE] WHERE U_CODIGO = ?";
+                            break;
+        
+                        case 'I':
+                            $tipo_solicitud_nombre  = 'INASISTENCIA';
+                            $sql02                  = "SELECT U_DESAMP AS tipo_permiso_nombre FROM [CSF_PRUEBA].[dbo].[@A1A_TIIN] WHERE U_CODIGO = ?";
+                            break;
+                    }
+
+                    $stmtMSSQL02= $connMSSQL->prepare($sql02);
+                    $stmtMSSQL02->execute([trim(strtoupper($rowMSSQL01['tipo_permiso_codigo3']))]);
+                    $rowMSSQL02 = $stmtMSSQL02->fetch(PDO::FETCH_ASSOC);
+
+                    $tipo_permiso_nombre = $rowMSSQL02['tipo_permiso_nombre'];
+
                     $detalle    = array(
+                        'tipo_solicitud_codigo'             => $rowMSSQL01['tipo_solicitud_codigo'],
+                        'tipo_permiso_nombre'               => trim(strtoupper($tipo_permiso_nombre)),
                         'solicitud_codigo'                  => $rowMSSQL01['solicitud_codigo'],
                         'solicitud_estado_codigo'           => $rowMSSQL01['solicitud_estado_codigo'],
                         'solicitud_estado_nombre'           => trim(strtoupper($solicitud_estado_nombre)),
@@ -2594,6 +2630,8 @@
                     $json = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success SELECT', 'data' => $result), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
                 } else {
                     $detalle    = array(
+                        'tipo_solicitud_codigo'             => '',
+                        'tipo_permiso_nombre'               => '',
                         'solicitud_codigo'                  => '',
                         'solicitud_estado_codigo'           => '',
                         'solicitud_estado_nombre'           => '',
