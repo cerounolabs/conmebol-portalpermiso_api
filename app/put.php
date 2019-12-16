@@ -41,3 +41,45 @@
         
         return $json;
     });
+
+    $app->put('/v1/200/{codigo}', function($request) {
+        require __DIR__.'/../src/connect.php';
+
+        $val00      = $request->getAttribute('codigo');
+        $val01      = $request->getParsedBody()['tipo_estado_codigo'];
+        $val02      = $request->getParsedBody()['solicitud_codigo'];
+        $val03      = $request->getParsedBody()['solicitud_observacion_aprobador'];
+        $val04      = $request->getParsedBody()['solicitud_usuario_aprobador'];
+        $val05      = $request->getParsedBody()['solicitud_fecha_hora_aprobador'];
+        $val06      = $request->getParsedBody()['solicitud_ip_aprobador'];
+
+        $aud01      = $request->getParsedBody()['auditoria_usuario'];
+        $aud02      = $request->getParsedBody()['auditoria_fecha_hora'];
+        $aud03      = $request->getParsedBody()['auditoria_ip'];
+
+        if (isset($val00)) {
+            $sql00  = "UPDATE [CSF_PERMISOS].[adm].[SOLFIC] SET SOLFICEST = ?, SOLFICOB2 = ?, SOLFICUSA = ?, SOLFICFHA = GETDATE(), SOLFICIPA = ?, SOLFICAUS = ?, SOLFICAFH = GETDATE(), SOLFICAIP = ? WHERE SOLFICCOD = ?";
+
+            try {
+                $connMSSQL  = getConnectionMSSQL();
+                $stmtMSSQL00= $connMSSQL->prepare($sql00);
+                $stmtMSSQL00->execute([$val01, $val03, $val04, $val06, $aud01, $aud03, $val00]);
+
+                header("Content-Type: application/json; charset=utf-8");
+                $json       = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success UPDATE', 'codigo' => $val00), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+
+                $stmtMSSQL00->closeCursor();
+                $stmtMSSQL00 = null;
+            } catch (PDOException $e) {
+                header("Content-Type: application/json; charset=utf-8");
+                $json = json_encode(array('code' => 204, 'status' => 'failure', 'message' => 'Error INSERT: '.$e), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+            }
+        } else {
+            header("Content-Type: application/json; charset=utf-8");
+            $json = json_encode(array('code' => 400, 'status' => 'error', 'message' => 'Verifique, algún campo esta vacio.'), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
+        }
+
+        $connMSSQL  = null;
+        
+        return $json;
+    });
