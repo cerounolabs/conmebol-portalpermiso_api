@@ -2552,6 +2552,10 @@
                         case 'P':
                             $solicitud_estado_nombre = 'APROBADO';
                             break;
+
+                        case 'C':
+                            $solicitud_estado_nombre = 'ANULADO';
+                            break;
                     }
 
                     $detalle    = array(
