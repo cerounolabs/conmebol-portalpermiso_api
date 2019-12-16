@@ -48,17 +48,22 @@
         $val00      = $request->getAttribute('codigo');
         $val01      = $request->getParsedBody()['tipo_estado_codigo'];
         $val02      = $request->getParsedBody()['solicitud_codigo'];
-        $val03      = $request->getParsedBody()['solicitud_observacion_aprobador'];
-        $val04      = $request->getParsedBody()['solicitud_usuario_aprobador'];
-        $val05      = $request->getParsedBody()['solicitud_fecha_hora_aprobador'];
-        $val06      = $request->getParsedBody()['solicitud_ip_aprobador'];
+        $val03      = $request->getParsedBody()['solicitud_observacion'];
+        $val04      = $request->getParsedBody()['solicitud_usuario'];
+        $val05      = $request->getParsedBody()['solicitud_fecha_hora'];
+        $val06      = $request->getParsedBody()['solicitud_ip'];
+        $val07      = $request->getParsedBody()['tipo_accion_codigo'];
 
         $aud01      = $request->getParsedBody()['auditoria_usuario'];
         $aud02      = $request->getParsedBody()['auditoria_fecha_hora'];
         $aud03      = $request->getParsedBody()['auditoria_ip'];
 
         if (isset($val00)) {
-            $sql00  = "UPDATE [CSF_PERMISOS].[adm].[SOLFIC] SET SOLFICEST = ?, SOLFICOB2 = ?, SOLFICUSA = ?, SOLFICFHA = GETDATE(), SOLFICIPA = ?, SOLFICAUS = ?, SOLFICAFH = GETDATE(), SOLFICAIP = ? WHERE SOLFICCOD = ?";
+            if ($val07 === 'J'){
+                $sql00  = "UPDATE [CSF_PERMISOS].[adm].[SOLFIC] SET SOLFICEST = ?, SOLFICOB2 = ?, SOLFICUSA = ?, SOLFICFHA = GETDATE(), SOLFICIPA = ?, SOLFICAUS = ?, SOLFICAFH = GETDATE(), SOLFICAIP = ? WHERE SOLFICCOD = ?";
+            } else {
+                $sql00  = "UPDATE [CSF_PERMISOS].[adm].[SOLFIC] SET SOLFICEST = ?, SOLFICOB3 = ?, SOLFICUST = ?, SOLFICFHT = GETDATE(), SOLFICIPT = ?, SOLFICAUS = ?, SOLFICAFH = GETDATE(), SOLFICAIP = ? WHERE SOLFICCOD = ?";
+            }
 
             try {
                 $connMSSQL  = getConnectionMSSQL();
