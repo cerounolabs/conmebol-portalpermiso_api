@@ -2564,7 +2564,7 @@
                 a.CodCargoSuperior          AS          superior_cargo_codigo,
                 a.NombreCargoSuperior       AS          superior_cargo_nombre
 
-                FROM [CSF_PRUEBA].[dbo].[empleados_AxisONE] 
+                FROM [CSF_PRUEBA].[dbo].[empleados_AxisONE] a
 
                 WHERE a.CedulaEmpleado = ?";
 
