@@ -2500,6 +2500,31 @@
         $val01      = $request->getAttribute('codigo');
         
         if (isset($val01)) {
+            $sql00  = "SELECT
+                a.CedulaEmpleado            AS          documento,
+                a.ApellidoPaterno           AS          apellido_1,
+                a.ApellidoMaterno           AS          apellido_2,
+                a.PrimerNombre              AS          nombre_1,
+                a.SegundoNombre             AS          nombre_2,
+                a.NombreEmpleado            AS          nombre_completo,
+                a.Sexo                      AS          tipo_sexo_codigo,
+                a.EstadoCivil               AS          estado_civil_codigo,
+                a.Email                     AS          email,
+                a.FechaNacimiento           AS          fecha_nacimiento,
+                a.CodigoCargo               AS          cargo_codigo,
+                a.Cargo                     AS          cargo_nombre,
+                a.CodigoGerencia            AS          gerencia_codigo,
+                a.Gerencia                  AS          gerencia_nombre,
+                a.CodigoDepto               AS          departamento_codigo,
+                a.Departamento              AS          departamento_nombre,         
+                a.CodCargoSuperior          AS          superior_cargo_codigo,
+                a.NombreCargoSuperior       AS          superior_cargo_nombre
+
+                FROM [CSF_PRUEBA].[dbo].[empleados_AxisONE] a
+                INNER JOIN [CSF_PRUEBA].[dbo].[empleados_AxisONE] b ON a.CodCargoSuperior = b.CodigoCargo
+
+                WHERE b.CedulaEmpleado = ?";
+            
             $sql01  = "SELECT
                 a.SOLFICCOD         AS          solicitud_codigo,
                 a.SOLFICEST         AS          solicitud_estado_codigo,
@@ -2544,115 +2569,93 @@
 
                 WHERE a.SOLFICDOC = ?";
 
-            $sql03  = "SELECT
-                a.CedulaEmpleado            AS          documento,
-                a.ApellidoPaterno           AS          apellido_1,
-                a.ApellidoMaterno           AS          apellido_2,
-                a.PrimerNombre              AS          nombre_1,
-                a.SegundoNombre             AS          nombre_2,
-                a.NombreEmpleado            AS          nombre_completo,
-                a.Sexo                      AS          tipo_sexo_codigo,
-                a.EstadoCivil               AS          estado_civil_codigo,
-                a.Email                     AS          email,
-                a.FechaNacimiento           AS          fecha_nacimiento,
-                a.CodigoCargo               AS          cargo_codigo,
-                a.Cargo                     AS          cargo_nombre,
-                a.CodigoGerencia            AS          gerencia_codigo,
-                a.Gerencia                  AS          gerencia_nombre,
-                a.CodigoDepto               AS          departamento_codigo,
-                a.Departamento              AS          departamento_nombre,         
-                a.CodCargoSuperior          AS          superior_cargo_codigo,
-                a.NombreCargoSuperior       AS          superior_cargo_nombre
-
-                FROM [CSF_PRUEBA].[dbo].[empleados_AxisONE] a
-
-                WHERE a.CedulaEmpleado = ?";
-
             try {
                 $connMSSQL  = getConnectionMSSQL();
                 
+                $stmtMSSQL00= $connMSSQL->prepare($sql00);
+                $stmtMSSQL00->execute([$val01]);
+
                 $stmtMSSQL01= $connMSSQL->prepare($sql01);
-                $stmtMSSQL01->execute([$val01]);
 
-                while ($rowMSSQL01 = $stmtMSSQL01->fetch()) {
-                    switch ($rowMSSQL01['solicitud_estado_codigo']) {
-                        case 'I':
-                            $solicitud_estado_nombre = 'INGRESADO';
-                            break;
-                        
-                        case 'A':
-                            $solicitud_estado_nombre = 'AUTORIZADO';
-                            break;
-                        
-                        case 'P':
-                            $solicitud_estado_nombre = 'APROBADO';
-                            break;
+                while ($rowMSSQL00 = $stmtMSSQL00->fetch()) {
+                    $stmtMSSQL01->execute([$rowMSSQL01['documento']]);
 
-                        case 'C':
-                            $solicitud_estado_nombre = 'ANULADO';
-                            break;
+                    while ($rowMSSQL01 = $stmtMSSQL01->fetch()) {
+                        switch ($rowMSSQL01['solicitud_estado_codigo']) {
+                            case 'I':
+                                $solicitud_estado_nombre = 'INGRESADO';
+                                break;
+                            
+                            case 'A':
+                                $solicitud_estado_nombre = 'AUTORIZADO';
+                                break;
+                            
+                            case 'P':
+                                $solicitud_estado_nombre = 'APROBADO';
+                                break;
+    
+                            case 'C':
+                                $solicitud_estado_nombre = 'ANULADO';
+                                break;
+                        }
+    
+                        switch ($rowMSSQL01['tipo_solicitud_codigo']) {
+                            case 'L':
+                                $tipo_solicitud_nombre  = 'LICENCIA';
+                                $sql02                  = "SELECT U_NOMBRE AS tipo_permiso_nombre FROM [CSF_PRUEBA].[dbo].[@A1A_TILC] WHERE U_CODIGO = ?";
+                                break;
+                            
+                            case 'P':
+                                $tipo_solicitud_nombre  = 'PERMISO';
+                                $sql02                  = "SELECT U_NOMBRE AS tipo_permiso_nombre FROM [CSF_PRUEBA].[dbo].[@A1A_TIPE] WHERE U_CODIGO = ?";
+                                break;
+            
+                            case 'I':
+                                $tipo_solicitud_nombre  = 'INASISTENCIA';
+                                $sql02                  = "SELECT U_DESAMP AS tipo_permiso_nombre FROM [CSF_PRUEBA].[dbo].[@A1A_TIIN] WHERE U_CODIGO = ?";
+                                break;
+                        }
+    
+                        $stmtMSSQL02= $connMSSQL->prepare($sql02);
+                        $stmtMSSQL02->execute([trim(strtoupper($rowMSSQL01['tipo_permiso_codigo3']))]);
+                        $rowMSSQL02 = $stmtMSSQL02->fetch(PDO::FETCH_ASSOC);
+
+                        $tipo_permiso_nombre= $rowMSSQL02['tipo_permiso_nombre'];
+                        $solicitud_persona  = $rowMSSQL00['nombre_completo'];
+    
+                        $detalle    = array(
+                            'tipo_permiso_codigo'               => $rowMSSQL01['tipo_permiso_codigo'],
+                            'tipo_permiso_nombre'               => trim(strtoupper($tipo_permiso_nombre)),
+                            'solicitud_codigo'                  => $rowMSSQL01['solicitud_codigo'],
+                            'solicitud_estado_codigo'           => $rowMSSQL01['solicitud_estado_codigo'],
+                            'solicitud_estado_nombre'           => trim(strtoupper($solicitud_estado_nombre)),
+                            'solicitud_documento'               => trim(strtoupper($rowMSSQL01['solicitud_documento'])),
+                            'solicitud_persona'                 => trim(strtoupper($rowMSSQL01['solicitud_persona'])),
+                            'solicitud_fecha_desde'             => date("d/m/Y", strtotime($rowMSSQL01['solicitud_fecha_desde'])),
+                            'solicitud_fecha_hasta'             => date("d/m/Y", strtotime($rowMSSQL01['solicitud_fecha_hasta'])),
+                            'solicitud_fecha_cantidad'          => $rowMSSQL01['solicitud_fecha_cantidad'],
+                            'solicitud_hora_desde'              => trim(strtoupper($rowMSSQL01['solicitud_hora_desde'])),
+                            'solicitud_hora_hasta'              => trim(strtoupper($rowMSSQL01['solicitud_hora_hasta'])),
+                            'solicitud_hora_cantidad'           => $rowMSSQL01['solicitud_hora_cantidad'],
+                            'solicitud_usuario_colaborador'     => trim(strtoupper($rowMSSQL01['solicitud_usuario_colaborador'])),
+                            'solicitud_fecha_hora_colaborador'  => date("d/m/Y", strtotime($rowMSSQL01['solicitud_fecha_hora_colaborador'])),
+                            'solicitud_ip_colaborador'          => trim(strtoupper($rowMSSQL01['solicitud_ip_colaborador'])),
+                            'solicitud_observacion_colaborador' => trim(strtoupper($rowMSSQL01['solicitud_observacion_colaborador'])),
+                            'solicitud_usuario_aprobador'       => trim(strtoupper($rowMSSQL01['solicitud_usuario_aprobador'])),
+                            'solicitud_fecha_hora_aprobador'    => date("d/m/Y", strtotime($rowMSSQL01['solicitud_fecha_hora_aprobador'])),
+                            'solicitud_ip_aprobador'            => trim(strtoupper($rowMSSQL01['solicitud_ip_aprobador'])),
+                            'solicitud_observacion_aprobador'   => trim(strtoupper($rowMSSQL01['solicitud_observacion_aprobador'])),
+                            'solicitud_usuario_talento'         => trim(strtoupper($rowMSSQL01['solicitud_usuario_talento'])),
+                            'solicitud_fecha_hora_talento'      => date("d/m/Y", strtotime($rowMSSQL01['solicitud_fecha_hora_talento'])),
+                            'solicitud_ip_talento'              => trim(strtoupper($rowMSSQL01['solicitud_ip_talento'])),
+                            'solicitud_observacion_talento'     => trim(strtoupper($rowMSSQL01['solicitud_observacion_talento'])),
+                            'auditoria_usuario'                 => trim(strtoupper($rowMSSQL01['auditoria_usuario'])),
+                            'auditoria_fecha_hora'              => date("d/m/Y", strtotime($rowMSSQL01['auditoria_fecha_hora'])),
+                            'auditoria_ip'                      => trim(strtoupper($rowMSSQL01['auditoria_ip']))
+                        );
+    
+                        $result[]   = $detalle;
                     }
-
-                    switch ($rowMSSQL01['tipo_solicitud_codigo']) {
-                        case 'L':
-                            $tipo_solicitud_nombre  = 'LICENCIA';
-                            $sql02                  = "SELECT U_NOMBRE AS tipo_permiso_nombre FROM [CSF_PRUEBA].[dbo].[@A1A_TILC] WHERE U_CODIGO = ?";
-                            break;
-                        
-                        case 'P':
-                            $tipo_solicitud_nombre  = 'PERMISO';
-                            $sql02                  = "SELECT U_NOMBRE AS tipo_permiso_nombre FROM [CSF_PRUEBA].[dbo].[@A1A_TIPE] WHERE U_CODIGO = ?";
-                            break;
-        
-                        case 'I':
-                            $tipo_solicitud_nombre  = 'INASISTENCIA';
-                            $sql02                  = "SELECT U_DESAMP AS tipo_permiso_nombre FROM [CSF_PRUEBA].[dbo].[@A1A_TIIN] WHERE U_CODIGO = ?";
-                            break;
-                    }
-
-                    $stmtMSSQL02= $connMSSQL->prepare($sql02);
-                    $stmtMSSQL02->execute([trim(strtoupper($rowMSSQL01['tipo_permiso_codigo3']))]);
-                    $rowMSSQL02 = $stmtMSSQL02->fetch(PDO::FETCH_ASSOC);
-
-                    $stmtMSSQL03= $connMSSQL->prepare($sql03);
-                    $stmtMSSQL03->execute([trim(strtoupper($rowMSSQL01['solicitud_documento']))]);
-                    $rowMSSQL03 = $stmtMSSQL03->fetch(PDO::FETCH_ASSOC);
-
-                    $tipo_permiso_nombre= $rowMSSQL02['tipo_permiso_nombre'];
-                    $solicitud_persona  = $rowMSSQL03['nombre_completo'];
-
-                    $detalle    = array(
-                        'tipo_permiso_codigo'               => $rowMSSQL01['tipo_permiso_codigo'],
-                        'tipo_permiso_nombre'               => trim(strtoupper($tipo_permiso_nombre)),
-                        'solicitud_codigo'                  => $rowMSSQL01['solicitud_codigo'],
-                        'solicitud_estado_codigo'           => $rowMSSQL01['solicitud_estado_codigo'],
-                        'solicitud_estado_nombre'           => trim(strtoupper($solicitud_estado_nombre)),
-                        'solicitud_documento'               => trim(strtoupper($rowMSSQL01['solicitud_documento'])),
-                        'solicitud_persona'                 => trim(strtoupper($rowMSSQL01['solicitud_persona'])),
-                        'solicitud_fecha_desde'             => date("d/m/Y", strtotime($rowMSSQL01['solicitud_fecha_desde'])),
-                        'solicitud_fecha_hasta'             => date("d/m/Y", strtotime($rowMSSQL01['solicitud_fecha_hasta'])),
-                        'solicitud_fecha_cantidad'          => $rowMSSQL01['solicitud_fecha_cantidad'],
-                        'solicitud_hora_desde'              => trim(strtoupper($rowMSSQL01['solicitud_hora_desde'])),
-                        'solicitud_hora_hasta'              => trim(strtoupper($rowMSSQL01['solicitud_hora_hasta'])),
-                        'solicitud_hora_cantidad'           => $rowMSSQL01['solicitud_hora_cantidad'],
-                        'solicitud_usuario_colaborador'     => trim(strtoupper($rowMSSQL01['solicitud_usuario_colaborador'])),
-                        'solicitud_fecha_hora_colaborador'  => date("d/m/Y", strtotime($rowMSSQL01['solicitud_fecha_hora_colaborador'])),
-                        'solicitud_ip_colaborador'          => trim(strtoupper($rowMSSQL01['solicitud_ip_colaborador'])),
-                        'solicitud_observacion_colaborador' => trim(strtoupper($rowMSSQL01['solicitud_observacion_colaborador'])),
-                        'solicitud_usuario_aprobador'       => trim(strtoupper($rowMSSQL01['solicitud_usuario_aprobador'])),
-                        'solicitud_fecha_hora_aprobador'    => date("d/m/Y", strtotime($rowMSSQL01['solicitud_fecha_hora_aprobador'])),
-                        'solicitud_ip_aprobador'            => trim(strtoupper($rowMSSQL01['solicitud_ip_aprobador'])),
-                        'solicitud_observacion_aprobador'   => trim(strtoupper($rowMSSQL01['solicitud_observacion_aprobador'])),
-                        'solicitud_usuario_talento'         => trim(strtoupper($rowMSSQL01['solicitud_usuario_talento'])),
-                        'solicitud_fecha_hora_talento'      => date("d/m/Y", strtotime($rowMSSQL01['solicitud_fecha_hora_talento'])),
-                        'solicitud_ip_talento'              => trim(strtoupper($rowMSSQL01['solicitud_ip_talento'])),
-                        'solicitud_observacion_talento'     => trim(strtoupper($rowMSSQL01['solicitud_observacion_talento'])),
-                        'auditoria_usuario'                 => trim(strtoupper($rowMSSQL01['auditoria_usuario'])),
-                        'auditoria_fecha_hora'              => date("d/m/Y", strtotime($rowMSSQL01['auditoria_fecha_hora'])),
-                        'auditoria_ip'                      => trim(strtoupper($rowMSSQL01['auditoria_ip']))
-                    );
-
-                    $result[]   = $detalle;
                 }
 
                 if (isset($result)){
@@ -2693,14 +2696,14 @@
                     $json = json_encode(array('code' => 204, 'status' => 'ok', 'message' => 'No hay registros', 'data' => $detalle), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
                 }
 
+                $stmtMSSQL00->closeCursor();
+                $stmtMSSQL00 = null;
+
                 $stmtMSSQL01->closeCursor();
                 $stmtMSSQL01 = null;
 
                 $stmtMSSQL02->closeCursor();
                 $stmtMSSQL02 = null;
-
-                $stmtMSSQL03->closeCursor();
-                $stmtMSSQL03 = null;
             } catch (PDOException $e) {
                 header("Content-Type: application/json; charset=utf-8");
                 $json = json_encode(array('code' => 204, 'status' => 'failure', 'message' => 'Error SELECT: '.$e), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
