@@ -2567,13 +2567,15 @@
                 FROM [CSF_PERMISOS].[adm].[SOLFIC] a
                 INNER JOIN [CSF_PERMISOS].[adm].[DOMPAR] b ON a.SOLFICTST = b.DOMPARCOD
 
-                WHERE a.SOLFICDOC = ?";
+                WHERE a.SOLFICDOC = ?
+                
+                ORDER BY a.SOLFICCOD DESC";
 
             try {
                 $connMSSQL  = getConnectionMSSQL();
                 
                 $stmtMSSQL00= $connMSSQL->prepare($sql00);
-                $stmtMSSQL00->execute([$val01]);
+                $stmtMSSQL00->execute([$val01, $val01]);
 
                 $stmtMSSQL01= $connMSSQL->prepare($sql01);
 
