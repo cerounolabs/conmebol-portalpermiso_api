@@ -2567,7 +2567,7 @@
                 FROM [CSF_PERMISOS].[adm].[SOLFIC] a
                 INNER JOIN [CSF_PERMISOS].[adm].[DOMPAR] b ON a.SOLFICTST = b.DOMPARCOD
 
-                WHERE a.SOLFICDOC = ?";
+                WHERE a.SOLFICDOC = ? OR a.SOLFICDOC = ?";
 
             try {
                 $connMSSQL  = getConnectionMSSQL();
@@ -2578,7 +2578,7 @@
                 $stmtMSSQL01= $connMSSQL->prepare($sql01);
 
                 while ($rowMSSQL00 = $stmtMSSQL00->fetch()) {
-                    $stmtMSSQL01->execute([$rowMSSQL00['documento']]);
+                    $stmtMSSQL01->execute([$val01, $rowMSSQL00['documento']]);
 
                     while ($rowMSSQL01 = $stmtMSSQL01->fetch()) {
                         switch ($rowMSSQL01['solicitud_estado_codigo']) {
