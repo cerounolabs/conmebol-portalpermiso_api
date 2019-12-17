@@ -2494,13 +2494,15 @@
         return $json;
     });
 
-    $app->get('/v1/200/solicitud/{codigo}', function($request) {
+    $app->get('/v1/200/solicitud/{tipo}/{codigo}', function($request) {
         require __DIR__.'/../src/connect.php';
         
-        $val01      = $request->getAttribute('codigo');
+        $val01      = $request->getAttribute('tipo');
+        $val02      = $request->getAttribute('codigo');
         
-        if (isset($val01)) {
-            $sql00  = "SELECT
+        if (isset($val01) && isset($val02)) {            
+            if ($val01 === 1) {
+                $sql00  = "SELECT
                 a.CedulaEmpleado            AS          documento,
                 a.ApellidoPaterno           AS          apellido_1,
                 a.ApellidoMaterno           AS          apellido_2,
@@ -2523,8 +2525,34 @@
                 FROM [CSF_PRUEBA].[dbo].[empleados_AxisONE] a
                 INNER JOIN [CSF_PRUEBA].[dbo].[empleados_AxisONE] b ON a.CodCargoSuperior = b.CodigoCargo
 
-                WHERE a.CedulaEmpleado = ? OR b.CedulaEmpleado = ?";
-            
+                WHERE a.CedulaEmpleado = ?";
+            } else {
+                $sql00  = "SELECT
+                a.CedulaEmpleado            AS          documento,
+                a.ApellidoPaterno           AS          apellido_1,
+                a.ApellidoMaterno           AS          apellido_2,
+                a.PrimerNombre              AS          nombre_1,
+                a.SegundoNombre             AS          nombre_2,
+                a.NombreEmpleado            AS          nombre_completo,
+                a.Sexo                      AS          tipo_sexo_codigo,
+                a.EstadoCivil               AS          estado_civil_codigo,
+                a.Email                     AS          email,
+                a.FechaNacimiento           AS          fecha_nacimiento,
+                a.CodigoCargo               AS          cargo_codigo,
+                a.Cargo                     AS          cargo_nombre,
+                a.CodigoGerencia            AS          gerencia_codigo,
+                a.Gerencia                  AS          gerencia_nombre,
+                a.CodigoDepto               AS          departamento_codigo,
+                a.Departamento              AS          departamento_nombre,         
+                a.CodCargoSuperior          AS          superior_cargo_codigo,
+                a.NombreCargoSuperior       AS          superior_cargo_nombre
+
+                FROM [CSF_PRUEBA].[dbo].[empleados_AxisONE] a
+                INNER JOIN [CSF_PRUEBA].[dbo].[empleados_AxisONE] b ON a.CodCargoSuperior = b.CodigoCargo
+
+                WHERE b.CedulaEmpleado = ?";
+            }
+
             $sql01  = "SELECT
                 a.SOLFICCOD         AS          solicitud_codigo,
                 a.SOLFICEST         AS          solicitud_estado_codigo,
@@ -2575,7 +2603,7 @@
                 $connMSSQL  = getConnectionMSSQL();
                 
                 $stmtMSSQL00= $connMSSQL->prepare($sql00);
-                $stmtMSSQL00->execute([$val01, $val01]);
+                $stmtMSSQL00->execute([$val02]);
 
                 $stmtMSSQL01= $connMSSQL->prepare($sql01);
 
@@ -2724,8 +2752,6 @@
         require __DIR__.'/../src/connect.php';
         
         $val01      = $request->getAttribute('codigo');
-        
-//        if (isset($val01)) {
             $sql01  = "SELECT
                 a.SOLFICCOD         AS          solicitud_codigo,
                 a.SOLFICEST         AS          solicitud_estado_codigo,
@@ -2797,7 +2823,6 @@
                 
                 $stmtMSSQL01= $connMSSQL->prepare($sql01);
                 $stmtMSSQL01->execute([]);
-//                $stmtMSSQL01->execute([$val01]);
 
                 while ($rowMSSQL01 = $stmtMSSQL01->fetch()) {
                     switch ($rowMSSQL01['solicitud_estado_codigo']) {
@@ -2930,10 +2955,6 @@
                 header("Content-Type: application/json; charset=utf-8");
                 $json = json_encode(array('code' => 204, 'status' => 'failure', 'message' => 'Error SELECT: '.$e), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
             }
-//        } else {
-//            header("Content-Type: application/json; charset=utf-8");
-//            $json = json_encode(array('code' => 400, 'status' => 'error', 'message' => 'Verifique, algún campo esta vacio.'), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
-//        }
 
         $connMSSQL  = null;
         
