@@ -2573,7 +2573,7 @@
                 $connMSSQL  = getConnectionMSSQL();
                 
                 $stmtMSSQL00= $connMSSQL->prepare($sql00);
-                $stmtMSSQL00->execute([$val01]);
+                $stmtMSSQL00->execute([$val01, $val01]);
 
                 $stmtMSSQL01= $connMSSQL->prepare($sql01);
 
