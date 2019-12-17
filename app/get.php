@@ -2630,7 +2630,7 @@
                             'solicitud_estado_codigo'           => $rowMSSQL01['solicitud_estado_codigo'],
                             'solicitud_estado_nombre'           => trim(strtoupper($solicitud_estado_nombre)),
                             'solicitud_documento'               => trim(strtoupper($rowMSSQL01['solicitud_documento'])),
-                            'solicitud_persona'                 => trim(strtoupper($rowMSSQL01['solicitud_persona'])),
+                            'solicitud_persona'                 => trim(strtoupper($solicitud_persona)),
                             'solicitud_fecha_desde'             => date("d/m/Y", strtotime($rowMSSQL01['solicitud_fecha_desde'])),
                             'solicitud_fecha_hasta'             => date("d/m/Y", strtotime($rowMSSQL01['solicitud_fecha_hasta'])),
                             'solicitud_fecha_cantidad'          => $rowMSSQL01['solicitud_fecha_cantidad'],
