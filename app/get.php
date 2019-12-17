@@ -2578,7 +2578,7 @@
                 $stmtMSSQL01= $connMSSQL->prepare($sql01);
 
                 while ($rowMSSQL00 = $stmtMSSQL00->fetch()) {
-                    $stmtMSSQL01->execute([$rowMSSQL01['documento']]);
+                    $stmtMSSQL01->execute([$rowMSSQL00['documento']]);
 
                     while ($rowMSSQL01 = $stmtMSSQL01->fetch()) {
                         switch ($rowMSSQL01['solicitud_estado_codigo']) {
