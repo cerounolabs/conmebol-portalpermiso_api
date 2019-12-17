@@ -2501,7 +2501,7 @@
         $val02      = $request->getAttribute('codigo');
         
         if (isset($val01) && isset($val02)) {            
-            if ($val01 === 1) {
+            if ($val01 === '1') {
                 $sql00  = "SELECT
                 a.CedulaEmpleado            AS          documento,
                 a.ApellidoPaterno           AS          apellido_1,
