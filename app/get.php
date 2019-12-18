@@ -2714,6 +2714,31 @@
 
                 FROM [CSF_PRUEBA].[dbo].[empleados_AxisONE] a
                 INNER JOIN [CSF_PRUEBA].[dbo].[empleados_AxisONE] b ON a.CodCargoSuperior = b.CodigoCargo";
+            } elseif ($val01 == '4') {
+                $sql00  = "SELECT
+                a.CedulaEmpleado            AS          documento,
+                a.ApellidoPaterno           AS          apellido_1,
+                a.ApellidoMaterno           AS          apellido_2,
+                a.PrimerNombre              AS          nombre_1,
+                a.SegundoNombre             AS          nombre_2,
+                a.NombreEmpleado            AS          nombre_completo,
+                a.Sexo                      AS          tipo_sexo_codigo,
+                a.EstadoCivil               AS          estado_civil_codigo,
+                a.Email                     AS          email,
+                a.FechaNacimiento           AS          fecha_nacimiento,
+                a.CodigoCargo               AS          cargo_codigo,
+                a.Cargo                     AS          cargo_nombre,
+                a.CodigoGerencia            AS          gerencia_codigo,
+                a.Gerencia                  AS          gerencia_nombre,
+                a.CodigoDepto               AS          departamento_codigo,
+                a.Departamento              AS          departamento_nombre,         
+                a.CodCargoSuperior          AS          superior_cargo_codigo,
+                a.NombreCargoSuperior       AS          superior_cargo_nombre
+
+                FROM [CSF_PRUEBA].[dbo].[empleados_AxisONE] a
+                INNER JOIN [CSF_PRUEBA].[dbo].[empleados_AxisONE] b ON a.CodCargoSuperior = b.CodigoCargo
+
+                WHERE a.CedulaEmpleado = ? OR b.CedulaEmpleado = ?";
             }
 
             $sql01  = "SELECT
@@ -2769,8 +2794,10 @@
 
                 if ($val01 == '1' || $val01 == '2') {
                     $stmtMSSQL00->execute([$val02]);
-                } else {
+                } elseif ($val01 == '3') {
                     $stmtMSSQL00->execute([]);
+                } elseif ($val01 == '4') {
+                    $stmtMSSQL00->execute([$val02, $val02]);
                 }
 
                 $stmtMSSQL01= $connMSSQL->prepare($sql01);
