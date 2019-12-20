@@ -18,7 +18,7 @@
                 $usuario_LDAP     = $val01;
                 $contrasena_LDAP  = $val02;
                 $filtro_LDAP      = '(&(objectClass=user)(objectCategory=person)(samaccountname='.$usuario_LDAP.'))';
-                $atributo_LDAP    = array('givenname', 'userprincipalname', 'samaccountname', 'sn', 'postalcode', 'thumbnailphoto', 'jpegPhoto');
+                $atributo_LDAP    = array('givenname', 'userprincipalname', 'samaccountname', 'sn', 'postalcode', 'thumbnailphoto', 'jpegphoto');
                 $conectado_LDAP   = ldap_connect($servidor_LDAP);
 
                 ldap_set_option($conectado_LDAP, LDAP_OPT_PROTOCOL_VERSION, 3);
@@ -56,7 +56,7 @@
                                             $user_var06 = strtoupper(htmlspecialchars($i[$j][0]));
                                             break;
 
-                                        case 'jpegPhoto':
+                                        case 'jpegphoto':
                                             $user_var07 = strtoupper(htmlspecialchars($i[$j][0]));
                                             break;
                                     }
