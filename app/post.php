@@ -55,6 +55,10 @@
                                         case 'thumbnailPhoto':
                                             $user_var06 = strtoupper(htmlspecialchars($i[$j][0]));
                                             break;
+
+                                        case 'jpegPhoto':
+                                            $user_var07 = strtoupper(htmlspecialchars($i[$j][0]));
+                                            break;
                                     }
                                 }
                             }
@@ -66,7 +70,8 @@
                             'user_var03' => $user_var03,
                             'user_var04' => $user_var04,
                             'user_var05' => $user_var05,
-                            'user_var06' => $user_var06
+                            'user_var06' => $user_var06,
+                            'user_var07' => $user_var07,
                         );
 
                         $reCode     = 200;
@@ -82,7 +87,8 @@
                             'user_var03' => '',
                             'user_var04' => '',
                             'user_var05' => '',
-                            'user_var06' => ''
+                            'user_var06' => '',
+                            'user_var07' => ''
                         );
                     }
                 } else {
@@ -94,7 +100,8 @@
                         'user_var03' => '',
                         'user_var04' => '',
                         'user_var05' => '',
-                        'user_var06' => ''
+                        'user_var06' => '',
+                        'user_var07' => ''
                     );
                 }
 
