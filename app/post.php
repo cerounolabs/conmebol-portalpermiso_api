@@ -466,7 +466,7 @@
                                 }
                             }
     
-                            $auxFech = strtotime('+1 day', strtotime($auxFech));
+                            $auxFech = date('Y-m-d', strtotime('+1 day', strtotime($auxFech)));
                         }
                     }
 
