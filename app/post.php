@@ -403,6 +403,8 @@
                 $stmtMSSQL00= $connMSSQL->prepare($sql00);
                 $stmtMSSQL00->execute([$val01]);
 
+                $stmtMSSQL03= $connMSSQL->prepare($sql03);
+
                 while ($rowMSSQL01 = $stmtMSSQL01->fetch()) {
                     switch ($rowMSSQL01['tipo_solicitud_codigo']) {
                         case 'L':
@@ -485,7 +487,8 @@
                         $SOLAXILIN  = 'UV';
                     }
 
-                    $stmtMSSQL00->execute([$SOLAXICAB, $SOLAXIEST, $SOLAXISOL, $SOLAXIDOC, $SOLAXIFED, $SOLAXIFEH, $SOLAXIAPD, $SOLAXIAPH, $SOLAXICAN, $SOLAXITIP, $SOLAXIDIA, $SOLAXIUNI, $SOLAXICOM, $SOLAXIIDP, $SOLAXICON, $SOLAXICLA, $SOLAXILIN, $SOLAXIORI, $SOLAXIGRU, $SOLAXIAUS, $SOLAXIAIP]);
+                    
+                    $stmtMSSQL03->execute([$SOLAXICAB, $SOLAXIEST, $SOLAXISOL, $SOLAXIDOC, $SOLAXIFED, $SOLAXIFEH, $SOLAXIAPD, $SOLAXIAPH, $SOLAXICAN, $SOLAXITIP, $SOLAXIDIA, $SOLAXIUNI, $SOLAXICOM, $SOLAXIIDP, $SOLAXICON, $SOLAXICLA, $SOLAXILIN, $SOLAXIORI, $SOLAXIGRU, $SOLAXIAUS, $SOLAXIAIP]);
                 }
 
                 header("Content-Type: application/json; charset=utf-8");
