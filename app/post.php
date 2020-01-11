@@ -444,6 +444,11 @@
                     $SOLAXICLA  = $rowMSSQL02['tipo_permiso_valor'];
                     $SOLAXISOL  = $rowMSSQL01['tipo_solicitud_codigo'];
                     $SOLAXILIN  = '';
+                    $SOLAXIORI  = '';
+                    $SOLAXIGRU  = '';
+                    $SOLAXIAUS  = $aud01;
+	                $SOLAXIAFH  = $aud02;
+	                $SOLAXIAIP  = $aud03;
 
                     if ($SOLAXIFED == $SOLAXIFEH) {
                         $SOLAXICAN = 1;
