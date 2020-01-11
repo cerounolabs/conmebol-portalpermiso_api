@@ -429,26 +429,26 @@
 
                     $SOLAXICAB  = $val01;
                     $SOLAXIEST  = 'P';
-                    $SOLAXIDOC  = trim($rowMSSQL01['solicitud_documento']);
+                    $SOLAXIDOC  = trim(strtoupper($rowMSSQL01['solicitud_documento']));
                     $SOLAXIFED  = $rowMSSQL01['solicitud_fecha_desde'];
                     $SOLAXIFEH  = $rowMSSQL01['solicitud_fecha_hasta'];
                     $SOLAXIAPD  = $rowMSSQL01['solicitud_fecha_desde'];
                     $SOLAXIAPH  = $rowMSSQL01['solicitud_fecha_hasta'];
                     $SOLAXICAN  = 0;
-                    $SOLAXITIP  = $rowMSSQL01['tipo_permiso_codigo3'];
+                    $SOLAXITIP  = trim(strtoupper($rowMSSQL01['tipo_permiso_codigo3']));
                     $SOLAXIDIA  = 1;
-                    $SOLAXIUNI  = $rowMSSQL01['tipo_dia_unidad'];
-                    $SOLAXICOM  = $rowMSSQL02['tipo_permiso_nombre'];
+                    $SOLAXIUNI  = trim(strtoupper($rowMSSQL01['tipo_dia_unidad']));
+                    $SOLAXICOM  = trim(strtoupper($rowMSSQL02['tipo_permiso_nombre']));
                     $SOLAXIIDP  = '';
                     $SOLAXICON  = '00:00';
-                    $SOLAXICLA  = $rowMSSQL02['tipo_permiso_valor'];
-                    $SOLAXISOL  = $rowMSSQL01['tipo_solicitud_codigo'];
+                    $SOLAXICLA  = trim(strtoupper($rowMSSQL02['tipo_permiso_valor']));
+                    $SOLAXISOL  = trim(strtoupper($rowMSSQL01['tipo_solicitud_codigo']));
                     $SOLAXILIN  = '';
                     $SOLAXIORI  = '';
                     $SOLAXIGRU  = '';
-                    $SOLAXIAUS  = $aud01;
+                    $SOLAXIAUS  = trim(strtoupper($aud01));
                     $SOLAXIAFH  = $aud02;
-                    $SOLAXIAIP  = $aud03;
+                    $SOLAXIAIP  = trim(strtoupper($aud03));
 
                     if ($SOLAXIFED == $SOLAXIFEH) {
                         $SOLAXICAN = 1;
@@ -494,8 +494,41 @@
                         $SOLAXILIN  = 'UV';
                     }
 
-                    
                     $stmtMSSQL03->execute([$SOLAXICAB, $SOLAXIEST, $SOLAXISOL, $SOLAXIDOC, $SOLAXIFED, $SOLAXIFEH, $SOLAXIAPD, $SOLAXIAPH, $SOLAXICAN, $SOLAXITIP, $SOLAXIDIA, $SOLAXIUNI, $SOLAXICOM, $SOLAXIIDP, $SOLAXICON, $SOLAXICLA, $SOLAXILIN, $SOLAXIORI, $SOLAXIGRU, $SOLAXIAUS, $SOLAXIAIP]);
+                    
+                    $auxFech    = $SOLAXIFEH;
+                    $SOLAXICAN  = 1;
+                    $SOLAXITIP  =  trim(strtoupper($rowMSSQL02['tipo_permiso_codigo']));
+                    $SOLAXIGRU  = $conn->lastInsertId('[CSF_PERMISOS].[adm].[SOLAXI]');
+
+                    if ($rowMSSQL01['tipo_permiso_codigo3'] == 'DSM' && $rowMSSQL01['tipo_solicitud_codigo'] == 'I') {
+                        $SOLAXISOL  = 'V';
+                        $SOLAXITIP  = 'DSM';
+                        $SOLAXILIN  = 'UV';
+                    }
+
+                    if ($SOLAXIFED == $auxFech) {
+                        $SOLAXIFEH  = $SOLAXIFED;
+                        $SOLAXIAPH  = $SOLAXIFED;
+
+                        $stmtMSSQL03->execute([$SOLAXICAB, $SOLAXIEST, $SOLAXISOL, $SOLAXIDOC, $SOLAXIFED, $SOLAXIFEH, $SOLAXIAPD, $SOLAXIAPH, $SOLAXICAN, $SOLAXITIP, $SOLAXIDIA, $SOLAXIUNI, $SOLAXICOM, $SOLAXIIDP, $SOLAXICON, $SOLAXICLA, $SOLAXILIN, $SOLAXIORI, $SOLAXIGRU, $SOLAXIAUS, $SOLAXIAIP]);
+                    } else {
+                        while ($auxFech >= $SOLAXIFED) {
+                            $dia        = date('w', strtotime($SOLAXIFED));
+                            $SOLAXIFEH  = $SOLAXIFED;
+                            $SOLAXIAPH  = $SOLAXIFED;
+    
+                            if ($dia >= 1 && $dia <= 5) {
+                                $stmtMSSQL03->execute([$SOLAXICAB, $SOLAXIEST, $SOLAXISOL, $SOLAXIDOC, $SOLAXIFED, $SOLAXIFEH, $SOLAXIAPD, $SOLAXIAPH, $SOLAXICAN, $SOLAXITIP, $SOLAXIDIA, $SOLAXIUNI, $SOLAXICOM, $SOLAXIIDP, $SOLAXICON, $SOLAXICLA, $SOLAXILIN, $SOLAXIORI, $SOLAXIGRU, $SOLAXIAUS, $SOLAXIAIP]);
+                            } else {
+                                if ($rowMSSQL01['tipo_dia_corrido'] == 'S') {
+                                    $stmtMSSQL03->execute([$SOLAXICAB, $SOLAXIEST, $SOLAXISOL, $SOLAXIDOC, $SOLAXIFED, $SOLAXIFEH, $SOLAXIAPD, $SOLAXIAPH, $SOLAXICAN, $SOLAXITIP, $SOLAXIDIA, $SOLAXIUNI, $SOLAXICOM, $SOLAXIIDP, $SOLAXICON, $SOLAXICLA, $SOLAXILIN, $SOLAXIORI, $SOLAXIGRU, $SOLAXIAUS, $SOLAXIAIP]);
+                                }
+                            }
+    
+                            $SOLAXIFED = date('Y-m-d', strtotime('+1 day', strtotime($SOLAXIFED)));
+                        }
+                    }
                 }
 
                 header("Content-Type: application/json; charset=utf-8");
