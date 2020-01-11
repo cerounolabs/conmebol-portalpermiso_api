@@ -427,6 +427,8 @@
                     $stmtMSSQL02->execute([trim(strtoupper($rowMSSQL01['tipo_permiso_codigo3']))]);
                     $rowMSSQL02 = $stmtMSSQL02->fetch(PDO::FETCH_ASSOC);
 
+                    $SOLAXICAB  = $val01;
+                    $SOLAXIEST  = 'P';
                     $SOLAXIDOC  = trim($rowMSSQL01['solicitud_documento']);
                     $SOLAXIFED  = $rowMSSQL01['solicitud_fecha_desde'];
                     $SOLAXIFEH  = $rowMSSQL01['solicitud_fecha_hasta'];
@@ -442,6 +444,11 @@
                     $SOLAXICLA  = $rowMSSQL02['tipo_permiso_valor'];
                     $SOLAXISOL  = $rowMSSQL01['tipo_solicitud_codigo'];
                     $SOLAXILIN  = '';
+                    $SOLAXIORI  = '';
+                    $SOLAXIGRU  = '';
+                    $SOLAXIAUS  = $aud01;
+	                $SOLAXIAFH  = $aud02;
+	                $SOLAXIAIP  = $aud03;
 
                     if ($SOLAXIFED == $SOLAXIFEH) {
                         $SOLAXICAN = 1;
