@@ -447,8 +447,8 @@
                     $SOLAXIORI  = '';
                     $SOLAXIGRU  = '';
                     $SOLAXIAUS  = $aud01;
-	                $SOLAXIAFH  = $aud02;
-	                $SOLAXIAIP  = $aud03;
+                    $SOLAXIAFH  = $aud02;
+                    $SOLAXIAIP  = $aud03;
 
                     if ($SOLAXIFED == $SOLAXIFEH) {
                         $SOLAXICAN = 1;
