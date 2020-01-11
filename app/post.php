@@ -455,7 +455,7 @@
                     } else {
                         $auxFech   = $SOLAXIFED;
 
-                        while ($SOLAXIFEH == $auxFech) {
+                        while ($SOLAXIFEH <= $auxFech) {
                             $dia = date('w', strtotime($auxFech));
     
                             if ($dia >= 1 && $dia <= 5) {
