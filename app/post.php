@@ -352,7 +352,7 @@
         $aud03      = $request->getParsedBody()['auditoria_ip'];
 
         if (isset($val01)) {        
-            $sql00  = "SELECT
+            $sql01  = "SELECT
                 a.SOLFICCOD         AS          solicitud_codigo,
                 a.SOLFICEST         AS          solicitud_estado_codigo,
                 a.SOLFICDOC         AS          solicitud_documento,
@@ -400,8 +400,8 @@
 
             try {
                 $connMSSQL  = getConnectionMSSQL();
-                $stmtMSSQL00= $connMSSQL->prepare($sql00);
-                $stmtMSSQL00->execute([$val01]);
+                $stmtMSSQL01= $connMSSQL->prepare($sql01);
+                $stmtMSSQL01->execute([$val01]);
 
                 $stmtMSSQL03= $connMSSQL->prepare($sql03);
 
@@ -494,8 +494,8 @@
                 header("Content-Type: application/json; charset=utf-8");
                 $json       = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success INSERT', 'codigo' => 0), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
 
-                $stmtMSSQL00->closeCursor();
-                $stmtMSSQL00 = null;
+                $stmtMSSQL01->closeCursor();
+                $stmtMSSQL01 = null;
             } catch (PDOException $e) {
                 header("Content-Type: application/json; charset=utf-8");
                 $json = json_encode(array('code' => 204, 'status' => 'failure', 'message' => 'Error INSERT: '.$e), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
