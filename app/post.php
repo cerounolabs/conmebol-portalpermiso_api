@@ -499,7 +499,7 @@
                     $auxFech    = $SOLAXIFEH;
                     $SOLAXICAN  = 1;
                     $SOLAXITIP  =  trim(strtoupper($rowMSSQL02['tipo_permiso_codigo']));
-                    $SOLAXIGRU  = $connMSSQL->lastInsertId('[CSF_PERMISOS].[adm].[SOLAXI]');
+                    $SOLAXIGRU  = $connMSSQL->lastInsertId();
 
                     if ($rowMSSQL01['tipo_permiso_codigo3'] == 'DSM' && $rowMSSQL01['tipo_solicitud_codigo'] == 'I') {
                         $SOLAXISOL  = 'V';
