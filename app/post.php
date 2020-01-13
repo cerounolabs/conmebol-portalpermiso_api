@@ -493,7 +493,7 @@
                         $SOLAXITIP  = 'VAC';
                         $SOLAXILIN  = 'UV';
                     }
-                    
+
                     $stmtMSSQL03->execute([$SOLAXICAB, $SOLAXIEST, $SOLAXISOL, $SOLAXIDOC, $SOLAXIFED, $SOLAXIFEH, $SOLAXIAPD, $SOLAXIAPH, $SOLAXICAN, $SOLAXITIP, $SOLAXIDIA, $SOLAXIUNI, $SOLAXICOM, $SOLAXIIDP, $SOLAXICON, $SOLAXICLA, $SOLAXILIN, $SOLAXIORI, $SOLAXIGRU, $SOLAXIAUS, $SOLAXIAIP]);
                     
                     $auxFech    = $SOLAXIFEH;
@@ -502,9 +502,9 @@
                     $SOLAXIGRU  = $connMSSQL->lastInsertId();
 
                     if (trim(strtoupper($rowMSSQL01['tipo_permiso_codigo3'])) == 'DSM' && trim(strtoupper($rowMSSQL01['tipo_solicitud_codigo'])) == 'I') {
-                        $SOLAXISOL  = 'V';
+                        $SOLAXISOL  = 'I';
                         $SOLAXITIP  = 'DSM';
-                        $SOLAXILIN  = 'UV';
+                        $SOLAXILIN  = '';
                     }
 
                     if ($SOLAXIFED == $auxFech) {
