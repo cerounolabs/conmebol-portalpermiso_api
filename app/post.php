@@ -488,12 +488,12 @@
                         $SOLAXICON  = get_format($auxHor);
                     }
 
-                    if (trim(strtoupper($rowMSSQL01['tipo_permiso_codigo3'])) == 'DSM') {
+//                    if (trim(strtoupper($rowMSSQL01['tipo_permiso_codigo3'])) == 'DSM' && trim(strtoupper($rowMSSQL01['tipo_solicitud_codigo'])) == 'I') {
                         $SOLAXISOL  = 'V';
-                        $SOLAXITIP  = 'VAC';
-                        $SOLAXILIN  = 'UV';
-                    }
-
+                        $SOLAXITIP  = trim(strtoupper($rowMSSQL01['tipo_solicitud_codigo']));
+                        $SOLAXILIN  = trim(strtoupper($rowMSSQL01['tipo_permiso_codigo3']));
+//                    }
+                    
                     $stmtMSSQL03->execute([$SOLAXICAB, $SOLAXIEST, $SOLAXISOL, $SOLAXIDOC, $SOLAXIFED, $SOLAXIFEH, $SOLAXIAPD, $SOLAXIAPH, $SOLAXICAN, $SOLAXITIP, $SOLAXIDIA, $SOLAXIUNI, $SOLAXICOM, $SOLAXIIDP, $SOLAXICON, $SOLAXICLA, $SOLAXILIN, $SOLAXIORI, $SOLAXIGRU, $SOLAXIAUS, $SOLAXIAIP]);
                     
                     $auxFech    = $SOLAXIFEH;
@@ -501,7 +501,7 @@
                     $SOLAXITIP  =  trim(strtoupper($rowMSSQL02['tipo_permiso_codigo']));
                     $SOLAXIGRU  = $connMSSQL->lastInsertId();
 
-                    if (trim(strtoupper($rowMSSQL01['tipo_permiso_codigo3'])) == 'DSM') {
+                    if (trim(strtoupper($rowMSSQL01['tipo_permiso_codigo3'])) == 'DSM' && trim(strtoupper($rowMSSQL01['tipo_solicitud_codigo'])) == 'I') {
                         $SOLAXISOL  = 'V';
                         $SOLAXITIP  = 'DSM';
                         $SOLAXILIN  = 'UV';
