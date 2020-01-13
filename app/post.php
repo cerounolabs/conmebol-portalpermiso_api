@@ -488,11 +488,11 @@
                         $SOLAXICON  = get_format($auxHor);
                     }
 
-//                    if (trim(strtoupper($rowMSSQL01['tipo_permiso_codigo3'])) == 'DSM' && trim(strtoupper($rowMSSQL01['tipo_solicitud_codigo'])) == 'I') {
+                    if (trim(strtoupper($rowMSSQL01['tipo_permiso_codigo3'])) == 'DSM' && trim(strtoupper($rowMSSQL01['tipo_solicitud_codigo'])) == 'I') {
                         $SOLAXISOL  = 'V';
-                        $SOLAXITIP  = trim(strtoupper($rowMSSQL01['tipo_solicitud_codigo']));
-                        $SOLAXILIN  = trim(strtoupper($rowMSSQL01['tipo_permiso_codigo3']));
-//                    }
+                        $SOLAXITIP  = 'VAC';
+                        $SOLAXILIN  = 'UV';
+                    }
                     
                     $stmtMSSQL03->execute([$SOLAXICAB, $SOLAXIEST, $SOLAXISOL, $SOLAXIDOC, $SOLAXIFED, $SOLAXIFEH, $SOLAXIAPD, $SOLAXIAPH, $SOLAXICAN, $SOLAXITIP, $SOLAXIDIA, $SOLAXIUNI, $SOLAXICOM, $SOLAXIIDP, $SOLAXICON, $SOLAXICLA, $SOLAXILIN, $SOLAXIORI, $SOLAXIGRU, $SOLAXIAUS, $SOLAXIAIP]);
                     
