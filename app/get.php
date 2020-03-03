@@ -2663,7 +2663,7 @@
                 a.NombreCargoSuperior       AS          superior_cargo_nombre
 
                 FROM [CSF_PRUEBA].[dbo].[empleados_AxisONE] a
-                INNER JOIN [CSF_PRUEBA].[dbo].[empleados_AxisONE] b ON a.CodCargoSuperior = b.CodigoCargo
+                LEFT OUTER JOIN [CSF_PRUEBA].[dbo].[empleados_AxisONE] b ON a.CodCargoSuperior = b.CodigoCargo
 
                 WHERE a.CedulaEmpleado = ?";
             } elseif ($val01 == '2') {
