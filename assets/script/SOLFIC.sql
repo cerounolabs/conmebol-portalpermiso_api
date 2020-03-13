@@ -9,6 +9,7 @@ CREATE TABLE [CSF_PERMISOS].[adm].[SOLFIC](
     [SOLFICHO1] [char](5) NOT NULL,
 	[SOLFICHO2] [char](5) NOT NULL,
 	[SOLFICHOC] [decimal](3,1) NOT NULL,
+	[SOLFICADJ] [varchar](100) NULL,
 	[SOLFICOB1] [varchar](5120) NULL,
     [SOLFICOB2] [varchar](5120) NULL,
     [SOLFICOB3] [varchar](5120) NULL,
