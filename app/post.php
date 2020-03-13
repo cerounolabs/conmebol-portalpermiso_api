@@ -309,19 +309,20 @@
         $val07      = $request->getParsedBody()['solicitud_hora_desde'];
         $val08      = $request->getParsedBody()['solicitud_hora_hasta'];
         $val09      = $request->getParsedBody()['solicitud_hora_cantidad'];
-        $val10      = $request->getParsedBody()['solicitud_observacion_colaborador'];
+        $val10      = $request->getParsedBody()['solicitud_adjunto'];
+        $val11      = $request->getParsedBody()['solicitud_observacion_colaborador'];
 
         $aud01      = $request->getParsedBody()['auditoria_usuario'];
         $aud02      = $request->getParsedBody()['auditoria_fecha_hora'];
         $aud03      = $request->getParsedBody()['auditoria_ip'];
 
         if (isset($val01) && isset($val02) && isset($val04)) {        
-            $sql00  = "INSERT INTO [adm].[SOLFIC] (SOLFICEST, SOLFICTST, SOLFICDOC, SOLFICFE1, SOLFICFE2, SOLFICFEC, SOLFICHO1, SOLFICHO2, SOLFICHOC, SOLFICOB1, SOLFICUSC, SOLFICFHC, SOLFICIPC, SOLFICAUS, SOLFICAFH, SOLFICAIP) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, GETDATE(), ?, ?, GETDATE(), ?)";
+            $sql00  = "INSERT INTO [adm].[SOLFIC] (SOLFICEST, SOLFICTST, SOLFICDOC, SOLFICFE1, SOLFICFE2, SOLFICFEC, SOLFICHO1, SOLFICHO2, SOLFICHOC, SOLFICADJ, SOLFICOB1, SOLFICUSC, SOLFICFHC, SOLFICIPC, SOLFICAUS, SOLFICAFH, SOLFICAIP) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, GETDATE(), ?, ?, GETDATE(), ?)";
 
             try {
                 $connMSSQL  = getConnectionMSSQL();
                 $stmtMSSQL00= $connMSSQL->prepare($sql00);
-                $stmtMSSQL00->execute([$val01, $val02, $val03, $val04, $val05, $val06, $val07, $val08, $val09, $val10, $aud01, $aud03, $aud01, $aud03]);
+                $stmtMSSQL00->execute([$val01, $val02, $val03, $val04, $val05, $val06, $val07, $val08, $val09, $val10, $val11, $aud01, $aud03, $aud01, $aud03]);
 
                 header("Content-Type: application/json; charset=utf-8");
                 $json       = json_encode(array('code' => 200, 'status' => 'ok', 'message' => 'Success INSERT', 'codigo' => 0), JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRESERVE_ZERO_FRACTION);
