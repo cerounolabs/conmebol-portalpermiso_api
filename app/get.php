@@ -2103,7 +2103,8 @@
             a.CodigoDepto               AS          departamento_codigo,
             a.Departamento              AS          departamento_nombre,         
             a.CodCargoSuperior          AS          superior_cargo_codigo,
-            a.NombreCargoSuperior       AS          superior_cargo_nombre
+            a.NombreCargoSuperior       AS          superior_cargo_nombre,
+            a.Manager                   AS          superior_manager
 
             FROM [CSF_PRUEBA].[dbo].[empleados_AxisONE] a";
 
@@ -2163,7 +2164,8 @@
                     'departamento_codigo'           => $rowMSSQL00['departamento_codigo'],
                     'departamento_nombre'           => trim(strtoupper($rowMSSQL00['departamento_nombre'])),
                     'superior_cargo_codigo'         => $rowMSSQL00['superior_cargo_codigo'],
-                    'superior_cargo_nombre'         => trim(strtoupper($rowMSSQL00['superior_cargo_nombre']))
+                    'superior_cargo_nombre'         => trim(strtoupper($rowMSSQL00['superior_cargo_nombre'])),
+                    'superior_manager'              => trim(strtoupper($rowMSSQL00['superior_manager']))
                 );
 
                 $result[]   = $detalle;
@@ -2194,7 +2196,8 @@
                     'departamento_codigo'           => '',
                     'departamento_nombre'           => '',
                     'superior_cargo_codigo'         => '',
-                    'superior_cargo_nombre'         => ''
+                    'superior_cargo_nombre'         => '',
+                    'superior_manager'              => ''
                 );
 
                 header("Content-Type: application/json; charset=utf-8");
@@ -2237,7 +2240,8 @@
                 a.CodigoDepto               AS          departamento_codigo,
                 a.Departamento              AS          departamento_nombre,         
                 a.CodCargoSuperior          AS          superior_cargo_codigo,
-                a.NombreCargoSuperior       AS          superior_cargo_nombre
+                a.NombreCargoSuperior       AS          superior_cargo_nombre,
+                a.Manager                   AS          superior_manager
 
                 FROM [CSF_PRUEBA].[dbo].[empleados_AxisONE] a
 
@@ -2299,7 +2303,8 @@
                         'departamento_codigo'           => $rowMSSQL00['departamento_codigo'],
                         'departamento_nombre'           => trim(strtoupper($rowMSSQL00['departamento_nombre'])),
                         'superior_cargo_codigo'         => $rowMSSQL00['superior_cargo_codigo'],
-                        'superior_cargo_nombre'         => trim(strtoupper($rowMSSQL00['superior_cargo_nombre']))
+                        'superior_cargo_nombre'         => trim(strtoupper($rowMSSQL00['superior_cargo_nombre'])),
+                        'superior_manager'              => trim(strtoupper($rowMSSQL00['superior_manager']))
                     );
 
                     $result[]   = $detalle;
@@ -2330,7 +2335,8 @@
                         'departamento_codigo'           => '',
                         'departamento_nombre'           => '',
                         'superior_cargo_codigo'         => '',
-                        'superior_cargo_nombre'         => ''
+                        'superior_cargo_nombre'         => '',
+                        'superior_manager'              => ''
                     );
 
                     header("Content-Type: application/json; charset=utf-8");
@@ -2377,7 +2383,8 @@
                 a.CodigoDepto               AS          departamento_codigo,
                 a.Departamento              AS          departamento_nombre,         
                 a.CodCargoSuperior          AS          superior_cargo_codigo,
-                a.NombreCargoSuperior       AS          superior_cargo_nombre
+                a.NombreCargoSuperior       AS          superior_cargo_nombre,
+                a.Manager                   AS          superior_manager
 
                 FROM [CSF_PRUEBA].[dbo].[empleados_AxisONE] a
 
@@ -2439,7 +2446,8 @@
                         'departamento_codigo'           => $rowMSSQL00['departamento_codigo'],
                         'departamento_nombre'           => trim(strtoupper($rowMSSQL00['departamento_nombre'])),
                         'superior_cargo_codigo'         => $rowMSSQL00['superior_cargo_codigo'],
-                        'superior_cargo_nombre'         => trim(strtoupper($rowMSSQL00['superior_cargo_nombre']))
+                        'superior_cargo_nombre'         => trim(strtoupper($rowMSSQL00['superior_cargo_nombre'])),
+                        'superior_manager'              => trim(strtoupper($rowMSSQL00['superior_manager']))
                     );
 
                     $result[]   = $detalle;
@@ -2470,7 +2478,8 @@
                         'departamento_codigo'           => '',
                         'departamento_nombre'           => '',
                         'superior_cargo_codigo'         => '',
-                        'superior_cargo_nombre'         => ''
+                        'superior_cargo_nombre'         => '',
+                        'superior_manager'              => ''
                     );
 
                     header("Content-Type: application/json; charset=utf-8");
@@ -2517,7 +2526,8 @@
                 a.CodigoDepto               AS          departamento_codigo,
                 a.Departamento              AS          departamento_nombre,         
                 a.CodCargoSuperior          AS          superior_cargo_codigo,
-                a.NombreCargoSuperior       AS          superior_cargo_nombre
+                a.NombreCargoSuperior       AS          superior_cargo_nombre,
+                a.Manager                   AS          superior_manager
 
                 FROM [CSF_PRUEBA].[dbo].[empleados_AxisONE] a
                 INNER JOIN [CSF_PRUEBA].[dbo].[empleados_AxisONE] b ON a.CodCargoSuperior = b.CodigoCargo
@@ -2580,7 +2590,8 @@
                         'departamento_codigo'           => $rowMSSQL01['departamento_codigo'],
                         'departamento_nombre'           => trim(strtoupper($rowMSSQL01['departamento_nombre'])),
                         'superior_cargo_codigo'         => $rowMSSQL01['superior_cargo_codigo'],
-                        'superior_cargo_nombre'         => trim(strtoupper($rowMSSQL01['superior_cargo_nombre']))
+                        'superior_cargo_nombre'         => trim(strtoupper($rowMSSQL01['superior_cargo_nombre'])),
+                        'superior_manager'              => trim(strtoupper($rowMSSQL01['superior_manager']))
                     );
 
                     $result[]   = $detalle;
@@ -2611,7 +2622,8 @@
                         'departamento_codigo'           => '',
                         'departamento_nombre'           => '',
                         'superior_cargo_codigo'         => '',
-                        'superior_cargo_nombre'         => ''
+                        'superior_cargo_nombre'         => '',
+                        'superior_manager'              => ''
                     );
 
                     header("Content-Type: application/json; charset=utf-8");
