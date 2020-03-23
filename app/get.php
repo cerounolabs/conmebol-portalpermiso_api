@@ -2104,7 +2104,8 @@
             a.Departamento              AS          departamento_nombre,         
             a.CodCargoSuperior          AS          superior_cargo_codigo,
             a.NombreCargoSuperior       AS          superior_cargo_nombre,
-            a.Manager                   AS          superior_manager
+            a.Manager                   AS          superior_manager_nombre,
+            a.EmailManager              AS          superior_manager_email
 
             FROM [CSF_PRUEBA].[dbo].[empleados_AxisONE] a";
 
@@ -2165,7 +2166,8 @@
                     'departamento_nombre'           => trim(strtoupper($rowMSSQL00['departamento_nombre'])),
                     'superior_cargo_codigo'         => $rowMSSQL00['superior_cargo_codigo'],
                     'superior_cargo_nombre'         => trim(strtoupper($rowMSSQL00['superior_cargo_nombre'])),
-                    'superior_manager'              => trim(strtoupper($rowMSSQL00['superior_manager']))
+                    'superior_manager_nombre'       => trim(strtoupper($rowMSSQL00['superior_manager_nombre'])),
+                    'superior_manager_email'        => trim(strtolower($rowMSSQL00['superior_manager_email']))
                 );
 
                 $result[]   = $detalle;
@@ -2197,7 +2199,8 @@
                     'departamento_nombre'           => '',
                     'superior_cargo_codigo'         => '',
                     'superior_cargo_nombre'         => '',
-                    'superior_manager'              => ''
+                    'superior_manager_nombre'       => '',
+                    'superior_manager_email'        => ''
                 );
 
                 header("Content-Type: application/json; charset=utf-8");
@@ -2241,7 +2244,8 @@
                 a.Departamento              AS          departamento_nombre,         
                 a.CodCargoSuperior          AS          superior_cargo_codigo,
                 a.NombreCargoSuperior       AS          superior_cargo_nombre,
-                a.Manager                   AS          superior_manager
+                a.Manager                   AS          superior_manager_nombre,
+                a.EmailManager              AS          superior_manager_email
 
                 FROM [CSF_PRUEBA].[dbo].[empleados_AxisONE] a
 
@@ -2304,7 +2308,8 @@
                         'departamento_nombre'           => trim(strtoupper($rowMSSQL00['departamento_nombre'])),
                         'superior_cargo_codigo'         => $rowMSSQL00['superior_cargo_codigo'],
                         'superior_cargo_nombre'         => trim(strtoupper($rowMSSQL00['superior_cargo_nombre'])),
-                        'superior_manager'              => trim(strtoupper($rowMSSQL00['superior_manager']))
+                        'superior_manager_nombre'       => trim(strtoupper($rowMSSQL00['superior_manager_nombre'])),
+                        'superior_manager_email'        => trim(strtolower($rowMSSQL00['superior_manager_email']))
                     );
 
                     $result[]   = $detalle;
@@ -2336,7 +2341,8 @@
                         'departamento_nombre'           => '',
                         'superior_cargo_codigo'         => '',
                         'superior_cargo_nombre'         => '',
-                        'superior_manager'              => ''
+                        'superior_manager_nombre'       => '',
+                        'superior_manager_email'        => ''
                     );
 
                     header("Content-Type: application/json; charset=utf-8");
@@ -2384,7 +2390,8 @@
                 a.Departamento              AS          departamento_nombre,         
                 a.CodCargoSuperior          AS          superior_cargo_codigo,
                 a.NombreCargoSuperior       AS          superior_cargo_nombre,
-                a.Manager                   AS          superior_manager
+                a.Manager                   AS          superior_manager_nombre,
+                a.EmailManager              AS          superior_manager_email
 
                 FROM [CSF_PRUEBA].[dbo].[empleados_AxisONE] a
 
@@ -2447,7 +2454,8 @@
                         'departamento_nombre'           => trim(strtoupper($rowMSSQL00['departamento_nombre'])),
                         'superior_cargo_codigo'         => $rowMSSQL00['superior_cargo_codigo'],
                         'superior_cargo_nombre'         => trim(strtoupper($rowMSSQL00['superior_cargo_nombre'])),
-                        'superior_manager'              => trim(strtoupper($rowMSSQL00['superior_manager']))
+                        'superior_manager_nombre'       => trim(strtoupper($rowMSSQL00['superior_manager_nombre'])),
+                        'superior_manager_email'        => trim(strtolower($rowMSSQL00['superior_manager_email']))
                     );
 
                     $result[]   = $detalle;
@@ -2479,7 +2487,8 @@
                         'departamento_nombre'           => '',
                         'superior_cargo_codigo'         => '',
                         'superior_cargo_nombre'         => '',
-                        'superior_manager'              => ''
+                        'superior_manager_nombre'       => '',
+                        'superior_manager_email'        => ''
                     );
 
                     header("Content-Type: application/json; charset=utf-8");
@@ -2527,7 +2536,8 @@
                 a.Departamento              AS          departamento_nombre,         
                 a.CodCargoSuperior          AS          superior_cargo_codigo,
                 a.NombreCargoSuperior       AS          superior_cargo_nombre,
-                a.Manager                   AS          superior_manager
+                a.Manager                   AS          superior_manager_nombre,
+                a.EmailManager              AS          superior_manager_email
 
                 FROM [CSF_PRUEBA].[dbo].[empleados_AxisONE] a
                 INNER JOIN [CSF_PRUEBA].[dbo].[empleados_AxisONE] b ON a.CodCargoSuperior = b.CodigoCargo
@@ -2591,7 +2601,8 @@
                         'departamento_nombre'           => trim(strtoupper($rowMSSQL01['departamento_nombre'])),
                         'superior_cargo_codigo'         => $rowMSSQL01['superior_cargo_codigo'],
                         'superior_cargo_nombre'         => trim(strtoupper($rowMSSQL01['superior_cargo_nombre'])),
-                        'superior_manager'              => trim(strtoupper($rowMSSQL01['superior_manager']))
+                        'superior_manager_nombre'       => trim(strtoupper($rowMSSQL01['superior_manager_nombre'])),
+                        'superior_manager_email'        => trim(strtolower($rowMSSQL00['superior_manager_email']))
                     );
 
                     $result[]   = $detalle;
@@ -2623,7 +2634,8 @@
                         'departamento_nombre'           => '',
                         'superior_cargo_codigo'         => '',
                         'superior_cargo_nombre'         => '',
-                        'superior_manager'              => ''
+                        'superior_manager_nombre'       => '',
+                        'superior_manager_email'        => ''
                     );
 
                     header("Content-Type: application/json; charset=utf-8");
@@ -2672,7 +2684,9 @@
                 a.CodigoDepto               AS          departamento_codigo,
                 a.Departamento              AS          departamento_nombre,         
                 a.CodCargoSuperior          AS          superior_cargo_codigo,
-                a.NombreCargoSuperior       AS          superior_cargo_nombre
+                a.NombreCargoSuperior       AS          superior_cargo_nombre,
+                a.Manager                   AS          superior_manager_nombre,
+                a.EmailManager              AS          superior_manager_email
 
                 FROM [CSF_PRUEBA].[dbo].[empleados_AxisONE] a
                 LEFT OUTER JOIN [CSF_PRUEBA].[dbo].[empleados_AxisONE] b ON a.CodCargoSuperior = b.CodigoCargo
@@ -2697,7 +2711,9 @@
                 a.CodigoDepto               AS          departamento_codigo,
                 a.Departamento              AS          departamento_nombre,         
                 a.CodCargoSuperior          AS          superior_cargo_codigo,
-                a.NombreCargoSuperior       AS          superior_cargo_nombre
+                a.NombreCargoSuperior       AS          superior_cargo_nombre,
+                a.Manager                   AS          superior_manager_nombre,
+                a.EmailManager              AS          superior_manager_email
 
                 FROM [CSF_PRUEBA].[dbo].[empleados_AxisONE] a
                 INNER JOIN [CSF_PRUEBA].[dbo].[empleados_AxisONE] b ON a.CodCargoSuperior = b.CodigoCargo
@@ -2722,7 +2738,9 @@
                 a.CodigoDepto               AS          departamento_codigo,
                 a.Departamento              AS          departamento_nombre,         
                 a.CodCargoSuperior          AS          superior_cargo_codigo,
-                a.NombreCargoSuperior       AS          superior_cargo_nombre
+                a.NombreCargoSuperior       AS          superior_cargo_nombre,
+                a.Manager                   AS          superior_manager_nombre,
+                a.EmailManager              AS          superior_manager_email
 
                 FROM [CSF_PRUEBA].[dbo].[empleados_AxisONE] a
                 INNER JOIN [CSF_PRUEBA].[dbo].[empleados_AxisONE] b ON a.CodCargoSuperior = b.CodigoCargo";
@@ -2745,7 +2763,9 @@
                 a.CodigoDepto               AS          departamento_codigo,
                 a.Departamento              AS          departamento_nombre,         
                 a.CodCargoSuperior          AS          superior_cargo_codigo,
-                a.NombreCargoSuperior       AS          superior_cargo_nombre
+                a.NombreCargoSuperior       AS          superior_cargo_nombre,
+                a.Manager                   AS          superior_manager_nombre,
+                a.EmailManager              AS          superior_manager_email
 
                 FROM [CSF_PRUEBA].[dbo].[empleados_AxisONE] a
                 LEFT OUTER JOIN [CSF_PRUEBA].[dbo].[empleados_AxisONE] b ON a.CodCargoSuperior = b.CodigoCargo
@@ -3027,7 +3047,9 @@
                 a.CodigoDepto               AS          departamento_codigo,
                 a.Departamento              AS          departamento_nombre,         
                 a.CodCargoSuperior          AS          superior_cargo_codigo,
-                a.NombreCargoSuperior       AS          superior_cargo_nombre
+                a.NombreCargoSuperior       AS          superior_cargo_nombre,
+                a.Manager                   AS          superior_manager_nombre,
+                a.EmailManager              AS          superior_manager_email
 
                 FROM [CSF_PRUEBA].[dbo].[empleados_AxisONE] a
 
