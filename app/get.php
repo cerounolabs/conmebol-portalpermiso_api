@@ -2658,11 +2658,12 @@
         return $json;
     });
 
-    $app->get('/v1/200/solicitud/{tipo}/{codigo}', function($request) {
+    $app->get('/v1/200/solicitud/{tipo}/{codigo}/{estado}', function($request) {
         require __DIR__.'/../src/connect.php';
         
         $val01      = $request->getAttribute('tipo');
         $val02      = $request->getAttribute('codigo');
+        $val03      = $request->getAttribute('estado');
         
         if (isset($val01) && isset($val02)) {            
             if ($val01 == '1') {
@@ -2773,52 +2774,149 @@
                 WHERE a.CedulaEmpleado = ? OR b.CedulaEmpleado = ?";
             }
 
-            $sql01  = "SELECT
-                a.SOLFICCOD         AS          solicitud_codigo,
-                a.SOLFICEST         AS          solicitud_estado_codigo,
-                a.SOLFICDOC         AS          solicitud_documento,
-                a.SOLFICFE1         AS          solicitud_fecha_desde,
-                a.SOLFICFE2         AS          solicitud_fecha_hasta,
-                a.SOLFICFEC         AS          solicitud_fecha_cantidad,
-                a.SOLFICHO1         AS          solicitud_hora_desde,
-                a.SOLFICHO2         AS          solicitud_hora_hasta,
-                a.SOLFICHOC         AS          solicitud_hora_cantidad,
-                a.SOLFICADJ         AS          solicitud_adjunto,
-                a.SOLFICOB1         AS          solicitud_observacion_colaborador,
-                a.SOLFICOB2         AS          solicitud_observacion_aprobador,
-                a.SOLFICOB3         AS          solicitud_observacion_talento,
-                a.SOLFICUSC         AS          solicitud_usuario_colaborador,
-                a.SOLFICFHC         AS          solicitud_fecha_hora_colaborador,
-                a.SOLFICIPC         AS          solicitud_ip_colaborador,         
-                a.SOLFICUSA         AS          solicitud_usuario_aprobador,
-                a.SOLFICFHA         AS          solicitud_fecha_hora_aprobador,
-                a.SOLFICIPA         AS          solicitud_ip_aprobador,
-                a.SOLFICUST         AS          solicitud_usuario_talento,
-                a.SOLFICFHT         AS          solicitud_fecha_hora_talento,
-                a.SOLFICIPT         AS          solicitud_ip_talento,
-                a.SOLFICAUS         AS          auditoria_usuario,
-                a.SOLFICAFH         AS          auditoria_fecha_hora,
-                a.SOLFICAIP         AS          auditoria_ip,
+            if ($val03 == 'I' || $val03 == 'A' || $val03 == 'P' || $val03 == 'C') {
+                $sql01  = "SELECT
+                    a.SOLFICCOD         AS          solicitud_codigo,
+                    a.SOLFICEST         AS          solicitud_estado_codigo,
+                    a.SOLFICDOC         AS          solicitud_documento,
+                    a.SOLFICFE1         AS          solicitud_fecha_desde,
+                    a.SOLFICFE2         AS          solicitud_fecha_hasta,
+                    a.SOLFICFEC         AS          solicitud_fecha_cantidad,
+                    a.SOLFICHO1         AS          solicitud_hora_desde,
+                    a.SOLFICHO2         AS          solicitud_hora_hasta,
+                    a.SOLFICHOC         AS          solicitud_hora_cantidad,
+                    a.SOLFICADJ         AS          solicitud_adjunto,
+                    a.SOLFICOB1         AS          solicitud_observacion_colaborador,
+                    a.SOLFICOB2         AS          solicitud_observacion_aprobador,
+                    a.SOLFICOB3         AS          solicitud_observacion_talento,
+                    a.SOLFICUSC         AS          solicitud_usuario_colaborador,
+                    a.SOLFICFHC         AS          solicitud_fecha_hora_colaborador,
+                    a.SOLFICIPC         AS          solicitud_ip_colaborador,         
+                    a.SOLFICUSA         AS          solicitud_usuario_aprobador,
+                    a.SOLFICFHA         AS          solicitud_fecha_hora_aprobador,
+                    a.SOLFICIPA         AS          solicitud_ip_aprobador,
+                    a.SOLFICUST         AS          solicitud_usuario_talento,
+                    a.SOLFICFHT         AS          solicitud_fecha_hora_talento,
+                    a.SOLFICIPT         AS          solicitud_ip_talento,
+                    a.SOLFICAUS         AS          auditoria_usuario,
+                    a.SOLFICAFH         AS          auditoria_fecha_hora,
+                    a.SOLFICAIP         AS          auditoria_ip,
 
-                b.DOMPARCOD         AS          tipo_permiso_codigo,
-                b.DOMPAREST         AS          tipo_estado_codigo,
-                b.DOMPARTST         AS          tipo_solicitud_codigo,
-                b.DOMPARPC1         AS          tipo_permiso_codigo1,
-                b.DOMPARPC2         AS          tipo_permiso_codigo2,
-                b.DOMPARPC3         AS          tipo_permiso_codigo3,
-                b.DOMPARORD         AS          tipo_orden_numero,
-                b.DOMPARDIC         AS          tipo_dia_cantidad,
-                b.DOMPARDIO         AS          tipo_dia_corrido,
-                b.DOMPARDIU         AS          tipo_dia_unidad,
-                b.DOMPARADJ         AS          tipo_archivo_adjunto,
-                b.DOMPAROBS         AS          tipo_observacion
+                    b.DOMPARCOD         AS          tipo_permiso_codigo,
+                    b.DOMPAREST         AS          tipo_estado_codigo,
+                    b.DOMPARTST         AS          tipo_solicitud_codigo,
+                    b.DOMPARPC1         AS          tipo_permiso_codigo1,
+                    b.DOMPARPC2         AS          tipo_permiso_codigo2,
+                    b.DOMPARPC3         AS          tipo_permiso_codigo3,
+                    b.DOMPARORD         AS          tipo_orden_numero,
+                    b.DOMPARDIC         AS          tipo_dia_cantidad,
+                    b.DOMPARDIO         AS          tipo_dia_corrido,
+                    b.DOMPARDIU         AS          tipo_dia_unidad,
+                    b.DOMPARADJ         AS          tipo_archivo_adjunto,
+                    b.DOMPAROBS         AS          tipo_observacion
 
-                FROM [CSF_PERMISOS].[adm].[SOLFIC] a
-                INNER JOIN [CSF_PERMISOS].[adm].[DOMPAR] b ON a.SOLFICTST = b.DOMPARCOD
+                    FROM [CSF_PERMISOS].[adm].[SOLFIC] a
+                    INNER JOIN [CSF_PERMISOS].[adm].[DOMPAR] b ON a.SOLFICTST = b.DOMPARCOD
 
-                WHERE a.SOLFICDOC = ?
-                
-                ORDER BY a.SOLFICCOD DESC";
+                    WHERE a.SOLFICDOC = ? AND a.SOLFICEST = ?
+                    
+                    ORDER BY a.SOLFICCOD DESC";
+            } elseif ($val03 == 'PC') {
+                $val03  = 'C';
+                $sql01  = "SELECT
+                    a.SOLFICCOD         AS          solicitud_codigo,
+                    a.SOLFICEST         AS          solicitud_estado_codigo,
+                    a.SOLFICDOC         AS          solicitud_documento,
+                    a.SOLFICFE1         AS          solicitud_fecha_desde,
+                    a.SOLFICFE2         AS          solicitud_fecha_hasta,
+                    a.SOLFICFEC         AS          solicitud_fecha_cantidad,
+                    a.SOLFICHO1         AS          solicitud_hora_desde,
+                    a.SOLFICHO2         AS          solicitud_hora_hasta,
+                    a.SOLFICHOC         AS          solicitud_hora_cantidad,
+                    a.SOLFICADJ         AS          solicitud_adjunto,
+                    a.SOLFICOB1         AS          solicitud_observacion_colaborador,
+                    a.SOLFICOB2         AS          solicitud_observacion_aprobador,
+                    a.SOLFICOB3         AS          solicitud_observacion_talento,
+                    a.SOLFICUSC         AS          solicitud_usuario_colaborador,
+                    a.SOLFICFHC         AS          solicitud_fecha_hora_colaborador,
+                    a.SOLFICIPC         AS          solicitud_ip_colaborador,         
+                    a.SOLFICUSA         AS          solicitud_usuario_aprobador,
+                    a.SOLFICFHA         AS          solicitud_fecha_hora_aprobador,
+                    a.SOLFICIPA         AS          solicitud_ip_aprobador,
+                    a.SOLFICUST         AS          solicitud_usuario_talento,
+                    a.SOLFICFHT         AS          solicitud_fecha_hora_talento,
+                    a.SOLFICIPT         AS          solicitud_ip_talento,
+                    a.SOLFICAUS         AS          auditoria_usuario,
+                    a.SOLFICAFH         AS          auditoria_fecha_hora,
+                    a.SOLFICAIP         AS          auditoria_ip,
+
+                    b.DOMPARCOD         AS          tipo_permiso_codigo,
+                    b.DOMPAREST         AS          tipo_estado_codigo,
+                    b.DOMPARTST         AS          tipo_solicitud_codigo,
+                    b.DOMPARPC1         AS          tipo_permiso_codigo1,
+                    b.DOMPARPC2         AS          tipo_permiso_codigo2,
+                    b.DOMPARPC3         AS          tipo_permiso_codigo3,
+                    b.DOMPARORD         AS          tipo_orden_numero,
+                    b.DOMPARDIC         AS          tipo_dia_cantidad,
+                    b.DOMPARDIO         AS          tipo_dia_corrido,
+                    b.DOMPARDIU         AS          tipo_dia_unidad,
+                    b.DOMPARADJ         AS          tipo_archivo_adjunto,
+                    b.DOMPAROBS         AS          tipo_observacion
+
+                    FROM [CSF_PERMISOS].[adm].[SOLFIC] a
+                    INNER JOIN [CSF_PERMISOS].[adm].[DOMPAR] b ON a.SOLFICTST = b.DOMPARCOD
+
+                    WHERE a.SOLFICDOC = ? AND (a.SOLFICEST = 'P' OR a.SOLFICEST = ?)
+                    
+                    ORDER BY a.SOLFICCOD DESC";
+            } elseif ($val03 == 'T') {
+                $sql01  = "SELECT
+                    a.SOLFICCOD         AS          solicitud_codigo,
+                    a.SOLFICEST         AS          solicitud_estado_codigo,
+                    a.SOLFICDOC         AS          solicitud_documento,
+                    a.SOLFICFE1         AS          solicitud_fecha_desde,
+                    a.SOLFICFE2         AS          solicitud_fecha_hasta,
+                    a.SOLFICFEC         AS          solicitud_fecha_cantidad,
+                    a.SOLFICHO1         AS          solicitud_hora_desde,
+                    a.SOLFICHO2         AS          solicitud_hora_hasta,
+                    a.SOLFICHOC         AS          solicitud_hora_cantidad,
+                    a.SOLFICADJ         AS          solicitud_adjunto,
+                    a.SOLFICOB1         AS          solicitud_observacion_colaborador,
+                    a.SOLFICOB2         AS          solicitud_observacion_aprobador,
+                    a.SOLFICOB3         AS          solicitud_observacion_talento,
+                    a.SOLFICUSC         AS          solicitud_usuario_colaborador,
+                    a.SOLFICFHC         AS          solicitud_fecha_hora_colaborador,
+                    a.SOLFICIPC         AS          solicitud_ip_colaborador,         
+                    a.SOLFICUSA         AS          solicitud_usuario_aprobador,
+                    a.SOLFICFHA         AS          solicitud_fecha_hora_aprobador,
+                    a.SOLFICIPA         AS          solicitud_ip_aprobador,
+                    a.SOLFICUST         AS          solicitud_usuario_talento,
+                    a.SOLFICFHT         AS          solicitud_fecha_hora_talento,
+                    a.SOLFICIPT         AS          solicitud_ip_talento,
+                    a.SOLFICAUS         AS          auditoria_usuario,
+                    a.SOLFICAFH         AS          auditoria_fecha_hora,
+                    a.SOLFICAIP         AS          auditoria_ip,
+
+                    b.DOMPARCOD         AS          tipo_permiso_codigo,
+                    b.DOMPAREST         AS          tipo_estado_codigo,
+                    b.DOMPARTST         AS          tipo_solicitud_codigo,
+                    b.DOMPARPC1         AS          tipo_permiso_codigo1,
+                    b.DOMPARPC2         AS          tipo_permiso_codigo2,
+                    b.DOMPARPC3         AS          tipo_permiso_codigo3,
+                    b.DOMPARORD         AS          tipo_orden_numero,
+                    b.DOMPARDIC         AS          tipo_dia_cantidad,
+                    b.DOMPARDIO         AS          tipo_dia_corrido,
+                    b.DOMPARDIU         AS          tipo_dia_unidad,
+                    b.DOMPARADJ         AS          tipo_archivo_adjunto,
+                    b.DOMPAROBS         AS          tipo_observacion
+
+                    FROM [CSF_PERMISOS].[adm].[SOLFIC] a
+                    INNER JOIN [CSF_PERMISOS].[adm].[DOMPAR] b ON a.SOLFICTST = b.DOMPARCOD
+
+                    WHERE a.SOLFICDOC = ? AND a.SOLFICEST <> ?
+                    
+                    ORDER BY a.SOLFICCOD DESC";
+            }
 
             try {
                 $connMSSQL  = getConnectionMSSQL();
@@ -2836,7 +2934,7 @@
                 $stmtMSSQL01= $connMSSQL->prepare($sql01);
 
                 while ($rowMSSQL00 = $stmtMSSQL00->fetch()) {
-                    $stmtMSSQL01->execute([$rowMSSQL00['documento']]);
+                    $stmtMSSQL01->execute([$rowMSSQL00['documento'], $val03]);
 
                     while ($rowMSSQL01 = $stmtMSSQL01->fetch()) {
                         switch ($rowMSSQL01['solicitud_estado_codigo']) {
