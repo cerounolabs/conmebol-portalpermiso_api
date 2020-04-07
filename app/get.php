@@ -2866,7 +2866,7 @@
                     FROM [CSF_PERMISOS].[adm].[SOLFIC] a
                     INNER JOIN [CSF_PERMISOS].[adm].[DOMPAR] b ON a.SOLFICTST = b.DOMPARCOD
 
-                    WHERE a.SOLFICDOC = ? AND (a.SOLFICEST = 'P' OR a.SOLFICEST = ?)
+                    WHERE a.SOLFICDOC = ? AND (a.SOLFICEST = 'P' OR a.SOLFICEST = ?) AND a.SOLFICUST <> ''
                     
                     ORDER BY a.SOLFICCOD DESC";
             } elseif ($val03 == 'T') {
